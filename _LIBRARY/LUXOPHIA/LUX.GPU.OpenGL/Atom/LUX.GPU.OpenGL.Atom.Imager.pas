@@ -98,6 +98,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure Unbind;
        procedure Use( const BindI_:GLuint );
        procedure Unuse( const BindI_:GLuint );
+       procedure UseComput( const BindI_:GLuint );
+       procedure UnuseComput( const BindI_:GLuint );
        procedure SendData;
      end;
 
@@ -134,6 +136,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure Unbind;
        procedure Use( const BindI_:GLuint );
        procedure Unuse( const BindI_:GLuint );
+       procedure UseComput( const BindI_:GLuint );
+       procedure UnuseComput( const BindI_:GLuint );
        procedure SendData; virtual; abstract;
      end;
 
@@ -370,6 +374,18 @@ begin
      glActiveTexture( GL_TEXTURE0 );
 
      _Field.Unuse( BindI_ );
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TGLImager.UseComput( const BindI_:GLuint );
+begin
+     glBindImageTexture( BindI_, ID, 0, GL_FALSE, 0, GL_READ_WRITE, _TexelF );
+end;
+
+procedure TGLImager.UnuseComput( const BindI_:GLuint );
+begin
+     glBindImageTexture( BindI_, 0, 0, GL_FALSE, 0, GL_READ_WRITE, _TexelF );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
