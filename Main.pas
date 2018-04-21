@@ -18,11 +18,12 @@ uses
   LUX.GPU.OpenGL.Matery.Imager.Preset,
   LUX.GPU.OpenGL.Atom.Imager.D2.Preset,
   LUX.GPU.OpenGL.Comput,
-  LUX.GPU.OpenGL.Render;
+  LUX.GPU.OpenGL.Render, FMX.Objects;
 
 type
   TForm1 = class(TForm)
     GLViewer1: TGLViewer;
+    Image1: TImage;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure GLViewer1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
@@ -172,6 +173,10 @@ begin
      MakeShaper;
 
      _Comput.Run( 2048 div 32, 1024 div 32, 1 );
+
+     _Matery.Imager.ReceData;
+
+     _Matery.Imager.ExportTo( Image1.Bitmap );
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
