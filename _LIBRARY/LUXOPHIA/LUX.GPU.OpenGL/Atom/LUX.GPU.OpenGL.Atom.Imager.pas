@@ -101,6 +101,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure UseComput( const BindI_:GLuint );
        procedure UnuseComput( const BindI_:GLuint );
        procedure SendData;
+       procedure ReceData;
+       procedure SendPixBuf;
+       procedure RecePixBuf;
      end;
 
      //-------------------------------------------------------------------------
@@ -139,6 +142,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        procedure UseComput( const BindI_:GLuint );
        procedure UnuseComput( const BindI_:GLuint );
        procedure SendData; virtual; abstract;
+       procedure ReceData; virtual; abstract;
+       procedure SendPixBuf; virtual; abstract;
+       procedure RecePixBuf;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -386,6 +392,13 @@ end;
 procedure TGLImager.UnuseComput( const BindI_:GLuint );
 begin
      glBindImageTexture( BindI_, 0, 0, GL_FALSE, 0, GL_READ_WRITE, _TexelF );
+end;
+
+//------------------------------------------------------------------------------
+
+procedure TGLImager.RecePixBuf;
+begin
+     glGetTexImage( _Kind, 0, _PixelF, _PixelT, 0 );
 end;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【ルーチン】
