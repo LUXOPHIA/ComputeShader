@@ -18,12 +18,14 @@ uses
   LUX.GPU.OpenGL.Matery.Imager.Preset,
   LUX.GPU.OpenGL.Atom.Imager.D2.Preset,
   LUX.GPU.OpenGL.Comput,
-  LUX.GPU.OpenGL.Render, FMX.Objects;
+  LUX.GPU.OpenGL.Render, FMX.Objects, FMX.Controls.Presentation, FMX.ScrollBox,
+  FMX.Memo;
 
 type
   TForm1 = class(TForm)
     GLViewer1: TGLViewer;
     Image1: TImage;
+    Memo1: TMemo;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure GLViewer1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
@@ -41,7 +43,8 @@ type
     _Comput :TGLComput;
     _Matery :TGLMateryImagG;
     _Shaper :TGLShaperFace;
-    _StoBuf :TGLStoBuf<Single>;
+    _StoBuf0 :TGLStoBuf<Single>;
+    _StoBuf1 :TGLStoBuf<Single>;
     ///// メソッド
     procedure MakeMatery;
     procedure MakeComput;
@@ -102,7 +105,8 @@ begin
 
           Imagers.Add( '_Imager', _Matery.Imager );
 
-          StoBufs.Add( '_Values', _StoBuf )
+          StoBufs.Add( '_Values0', _StoBuf0 );
+          StoBufs.Add( '_Values1', _StoBuf1 );
      end;
 end;
 
@@ -164,9 +168,11 @@ begin
 
      GLViewer1.Camera := _Camera;
 
-     _StoBuf := TGLStoBuf<Single>.Create( GL_STATIC_DRAW ); _StoBuf.Count := 10;
+     _StoBuf0 := TGLStoBuf<Single>.Create( GL_STATIC_DRAW ); _StoBuf0.Count := 5;
+     _StoBuf1 := TGLStoBuf<Single>.Create( GL_STATIC_DRAW ); _StoBuf1.Count := 5;
 
-     _StoBuf[ 0 ] := 0.5;
+     _StoBuf0[ 0 ] := 0.5;
+
 
      MakeMatery;
      MakeComput;
@@ -177,11 +183,18 @@ begin
      _Matery.Imager.ReceData;
 
      _Matery.Imager.ExportTo( Image1.Bitmap );
+
+     Memo1.Lines.Add( _StoBuf0[ 0 ].ToString );
+     Memo1.Lines.Add( _StoBuf0[ 1 ].ToString );
+     Memo1.Lines.Add( _StoBuf0[ 2 ].ToString );
+     Memo1.Lines.Add( _StoBuf0[ 3 ].ToString );
+     Memo1.Lines.Add( _StoBuf0[ 4 ].ToString );
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
-     _StoBuf.DisposeOf;
+     _StoBuf0.DisposeOf;
+     _StoBuf1.DisposeOf;
 
      _Scener.DisposeOf;
 end;

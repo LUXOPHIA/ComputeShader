@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   Caption = 'ComputeShader'
   ClientHeight = 420
-  ClientWidth = 830
+  ClientWidth = 995
   Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -34,5 +34,17 @@ object Form1: TForm1
     Size.Width = 400.000000000000000000
     Size.Height = 400.000000000000000000
     Size.PlatformDefault = False
+  end
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Position.X = 825.000000000000000000
+    Position.Y = 10.000000000000000000
+    Size.Width = 160.000000000000000000
+    Size.Height = 401.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Viewport.Width = 156.000000000000000000
+    Viewport.Height = 397.000000000000000000
   end
 end

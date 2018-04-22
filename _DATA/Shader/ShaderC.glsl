@@ -6,9 +6,14 @@ layout( local_size_x = 32,
         local_size_y = 32,
         local_size_z =  1 ) in;
 
-layout( std430 ) buffer _Values
+layout( std430 ) buffer _Values0
 {
-    float Values[];
+    float Values0[];
+};
+
+layout( std430 ) buffer _Values1
+{
+    float Values1[];
 };
 
 void main()
@@ -19,5 +24,10 @@ void main()
 
   imageStore( _Imager,
               storePos,
-              vec4( 0.5 + 0.5 * sin( localCoef * 0.05 ), 0.5, Values[ 0 ], 1 ) );
+              vec4( 0.5 + 0.5 * sin( localCoef * 0.05 ), 0.5, Values0[ 0 ], 1 ) );
+
+  Values0[ 1 ] = 1;
+  Values0[ 2 ] = 2;
+  Values0[ 3 ] = 3;
+  Values0[ 4 ] = 4;
 }
