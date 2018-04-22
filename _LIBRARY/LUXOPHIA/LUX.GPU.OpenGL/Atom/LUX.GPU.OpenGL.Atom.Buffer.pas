@@ -8,28 +8,35 @@ uses Winapi.OpenGL, Winapi.OpenGLext,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
+     IGLBuffer = interface;
+
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLBufferData<TValue>
-
-     TGLBufferData<TItem:record> = record
-     private type
-       PItem = ^TItem;
-     private
-       Start :Pointer;
-       Strid :GLint;
-       ///// アクセス
-       function GetItemP( const I_:Integer ) :PItem;
-       function GetItems( const I_:Integer ) :TItem;
-       procedure SetItems( const I_:Integer; const Item_:TItem );
-     public
-       constructor Create( const Start_:Pointer; const Strid_:GLint );
-       ///// プロパティ
-       property ItemP[ const I_:Integer ] :PItem read GetItemP               ;
-       property Items[ const I_:Integer ] :TItem read GetItems write SetItems; default;
-     end;
-
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
+
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLBufferData<_TItem_>
+
+     TGLBufferData<_TItem_:record> = class
+     private type
+       _PItem_ = ^_TItem_;
+     private
+       _Paren :IGLBuffer;
+       _Start :Pointer;
+       _Strid :GLint;
+       ///// アクセス
+       function GetItemP( const I_:Integer ) :_PItem_;
+       function GetItems( const I_:Integer ) :_TItem_;
+       procedure SetItems( const I_:Integer; const Item_:_TItem_ );
+     public
+       constructor Create( const Paren_:IGLBuffer; const Start_:Pointer; const Strid_:GLint );
+       destructor Destroy; override;
+       ///// プロパティ
+       property Paren                     :IGLBuffer read   _Paren               ;
+       property Start                     :Pointer   read   _Start               ;
+       property Strid                     :GLint     read   _Strid               ;
+       property ItemP[ const I_:Integer ] :_PItem_   read GetItemP               ;
+       property Items[ const I_:Integer ] :_TItem_   read GetItems write SetItems; default;
+     end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLBuffer<_TItem_>
 
@@ -52,6 +59,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        ///// メソッド
        procedure Bind;
        procedure Unbind;
+       procedure Unmap;
      end;
 
      //-------------------------------------------------------------------------
@@ -105,40 +113,50 @@ implementation //###############################################################
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLBufferData<TValue>
+//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLBufferData<_TItem_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TGLBufferData<TItem>.GetItemP( const I_:Integer ) :PItem;
+function TGLBufferData<_TItem_>.GetItemP( const I_:Integer ) :_PItem_;
 var
    P :PByte;
 begin
-     P := Start;  Inc( P, Strid * I_ );  Result := PItem( P );
+     P := _Start;  Inc( P, _Strid * I_ );  Result := _PItem_( P );
 end;
 
 //------------------------------------------------------------------------------
 
-function TGLBufferData<TItem>.GetItems( const I_:Integer ) :TItem;
+function TGLBufferData<_TItem_>.GetItems( const I_:Integer ) :_TItem_;
 begin
      Result := GetItemP( I_ )^;
 end;
 
-procedure TGLBufferData<TItem>.SetItems( const I_:Integer; const Item_:TItem );
+procedure TGLBufferData<_TItem_>.SetItems( const I_:Integer; const Item_:_TItem_ );
 begin
      GetItemP( I_ )^ := Item_;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TGLBufferData<TItem>.Create( const Start_:Pointer; const Strid_:GLint );
+constructor TGLBufferData<_TItem_>.Create( const Paren_:IGLBuffer; const Start_:Pointer; const Strid_:GLint );
 begin
-     Start := Start_;
-     Strid := Strid_;
+     inherited Create;
+
+     _Paren := Paren_;
+     _Start := Start_;
+     _Strid := Strid_;
 end;
 
-//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
+destructor TGLBufferData<_TItem_>.Destroy;
+begin
+     _Paren.Unmap;
+
+     inherited;
+end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLBuffer<_TItem_>
 
@@ -181,16 +199,22 @@ end;
 
 function TGLBuffer<_TItem_>.GetItems( const I_:Integer ) :_TItem_;
 begin
-     with Map( GL_READ_ONLY ) do Result := GetItems( I_ );
+     with Map( GL_READ_ONLY ) do
+     begin
+          Result := Items[ I_ ];
 
-     Unmap;
+          DisposeOf;
+     end;
 end;
 
 procedure TGLBuffer<_TItem_>.SetItems( const I_:Integer; const Item_:_TItem_ );
 begin
-     with Map( GL_WRITE_ONLY ) do SetItems( I_, Item_ );
+     with Map( GL_WRITE_ONLY ) do
+     begin
+          Items[ I_ ] := Item_;
 
-     Unmap;
+          DisposeOf;
+     end;
 end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
@@ -251,11 +275,8 @@ function TGLBuffer<_TItem_>.Map( const Access_:GLenum = GL_READ_WRITE ) :TGLBuff
 begin
      Bind;
 
-       with Result do
-       begin
-            Start := glMapBuffer( GetKind, Access_ );
-            Strid := _Strid;
-       end;
+       Result := TGLBufferData<_TItem_>.
+                 Create( Self, glMapBuffer( GetKind, Access_ ), _Strid );
 
      Unbind;
 end;
