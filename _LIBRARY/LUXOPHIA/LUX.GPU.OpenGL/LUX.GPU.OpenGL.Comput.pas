@@ -7,6 +7,7 @@ uses System.SysUtils, System.UITypes,
      LUX,
      LUX.Data.Dictionary,
      LUX.GPU.OpenGL,
+     LUX.GPU.OpenGL.Atom.Buffer,
      LUX.GPU.OpenGL.Atom.Buffer.VerBuf,
      LUX.GPU.OpenGL.Atom.Buffer.StoBuf,
      LUX.GPU.OpenGL.Atom.Imager,
@@ -27,10 +28,14 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        ///// アクセス
        function GetEngine  :TGLEngine;
        function GetShaderC :TGLShaderC;
+       function GetImagers :TIndexDictionary<String,IGLImager>;
+       function GetBuffers :TIndexDictionary<String,IGLBuffer>;
      {public}
        ///// プロパティ
-       property Engine  :TGLEngine  read GetEngine ;
-       property ShaderC :TGLShaderC read GetShaderC;
+       property Engine  :TGLEngine                          read GetEngine ;
+       property ShaderC :TGLShaderC                         read GetShaderC;
+       property Imagers :TIndexDictionary<String,IGLImager> read GetImagers;
+       property Buffers :TIndexDictionary<String,IGLBuffer> read GetBuffers;
        ///// メソッド
        procedure Run( const WorksX_,WorksY_,WorksZ_:GLuint );
      end;
@@ -42,19 +47,21 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        _Engine  :TGLEngine;
        _ShaderC :TGLShaderC;
-       _StoBufs :TIndexDictionary<String,IGLStoBuf>;
        _Imagers :TIndexDictionary<String,IGLImager>;
+       _Buffers :TIndexDictionary<String,IGLBuffer>;
        ///// アクセス
        function GetEngine  :TGLEngine;
        function GetShaderC :TGLShaderC;
+       function GetImagers :TIndexDictionary<String,IGLImager>;
+       function GetBuffers :TIndexDictionary<String,IGLBuffer>;
      public
        constructor Create;
        destructor Destroy; override;
        ///// プロパティ
        property Engine  :TGLEngine                          read GetEngine ;
        property ShaderC :TGLShaderC                         read GetShaderC;
-       property StoBufs :TIndexDictionary<String,IGLStoBuf> read   _StoBufs;
-       property Imagers :TIndexDictionary<String,IGLImager> read   _Imagers;
+       property Imagers :TIndexDictionary<String,IGLImager> read GetImagers;
+       property Buffers :TIndexDictionary<String,IGLBuffer> read GetBuffers;
        ///// メソッド
        procedure Run( const WorksX_,WorksY_,WorksZ_:GLuint );
      end;
@@ -84,9 +91,23 @@ begin
      Result := _Engine;
 end;
 
+//------------------------------------------------------------------------------
+
 function TGLComput.GetShaderC :TGLShaderC;
 begin
      Result := _ShaderC;
+end;
+
+//------------------------------------------------------------------------------
+
+function TGLComput.GetImagers :TIndexDictionary<String,IGLImager>;
+begin
+     Result := _Imagers;
+end;
+
+function TGLComput.GetBuffers :TIndexDictionary<String,IGLBuffer>;
+begin
+     Result := _Buffers;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -99,18 +120,15 @@ begin
      _ShaderC := TGLShaderC.Create;
 
      _Imagers := TIndexDictionary<String,IGLImager>.Create;
-     _StoBufs := TIndexDictionary<String,IGLStoBuf>.Create;
+     _Buffers := TIndexDictionary<String,IGLBuffer>.Create;
 
-     with _Engine do
-     begin
-          Attach( _ShaderC{Shad} );
-     end;
+     _Engine.Attach( _ShaderC{Shad} );
 end;
 
 destructor TGLComput.Destroy;
 begin
      _Imagers.DisposeOf;
-     _StoBufs.DisposeOf;
+     _Buffers.DisposeOf;
 
      _Engine .DisposeOf;
      _ShaderC.DisposeOf;
@@ -132,9 +150,9 @@ begin
           end;
      end;
 
-     for K in _StoBufs.Keys do
+     for K in _Buffers.Keys do
      begin
-          with _StoBufs[ K ] do
+          with _Buffers[ K ] do
           begin
                _Engine.StoBufs.Add( Index{BinP}, K{Name} );
           end;
@@ -149,9 +167,9 @@ begin
           with _Imagers[ K ] do Value.UseComput( Index );
      end;
 
-     for K in _StoBufs.Keys do
+     for K in _Buffers.Keys do
      begin
-          with _StoBufs[ K ] do Value.Use( Index );
+          with _Buffers[ K ] do glBindBufferBase( GL_SHADER_STORAGE_BUFFER, Index, Value.ID );
      end;
 
      glDispatchCompute( WorksX_, WorksY_, WorksZ_ );
