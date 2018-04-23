@@ -30,7 +30,7 @@ in vec2 _SenderTex;
 
 //------------------------------------------------------------------------------
 
-out TSenderVG
+out TSenderVF
 {
   vec4 Pos;
   vec4 Nor;
@@ -46,7 +46,7 @@ void main()
   _Result.Nor = transpose( inverse( _ShaperPose ) ) * _SenderNor;
   _Result.Tex =                                       _SenderTex;
 
-  //gl_Position = _ViewerScal * _CameraProj * inverse( _CameraPose ) * _Result.Pos;
+  gl_Position = _ViewerScal * _CameraProj * inverse( _CameraPose ) * _Result.Pos;
 }
 
 //############################################################################## ■

@@ -46,7 +46,7 @@ uniform sampler2D _Imager;
 
 //############################################################################## ■
 
-in TSenderGF
+in TSenderVF
 {
   vec4 Pos;
   vec4 Nor;

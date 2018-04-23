@@ -41,7 +41,7 @@ type
     _Scener :TGLScener;
     _Camera :TGLCameraPers;
     _Comput :TGLComput;
-    _Matery :TGLMateryImagG;
+    _Matery :TGLMateryImag;
     _Shaper :TGLShaperFace;
     _StoBuf0 :TGLStoBuf<Single>;
     _StoBuf1 :TGLStoBuf<Single>;
@@ -62,7 +62,7 @@ uses System.Math;
 
 procedure TForm1.MakeMatery;
 begin
-     _Matery := TGLMateryImagG.Create;
+     _Matery := TGLMateryImag.Create;
 
      with _Matery do
      begin
@@ -74,11 +74,6 @@ begin
           with ShaderV do
           begin
                Source.LoadFromFile( '..\..\_DATA\Shader\ShaderV.glsl' );
-          end;
-
-          with ShaderG do
-          begin
-               Source.LoadFromFile( '..\..\_DATA\Shader\ShaderG.glsl' );
           end;
 
           with ShaderF do
@@ -105,8 +100,10 @@ begin
 
           Imagers.Add( '_Imager', _Matery.Imager );
 
-          StoBufs.Add( '_Values0', _StoBuf0 );
-          StoBufs.Add( '_Values1', _StoBuf1 );
+          Buffers.Add( '_Values0', _StoBuf0 );
+          Buffers.Add( '_Values1', _StoBuf1 );
+          Buffers.Add( 'TPosBuf', _Shaper.PosBuf );
+          Buffers.Add( 'TNorBuf', _Shaper.NorBuf );
      end;
 end;
 
@@ -146,7 +143,7 @@ begin
 
      with _Shaper do
      begin
-          LoadFromFunc( BraidedTorus, 1300, 100 );
+          LoadFromFunc( BraidedTorus, 100-1, 100-1 );
 
           Matery := _Matery;
      end;
@@ -175,10 +172,10 @@ begin
 
 
      MakeMatery;
-     MakeComput;
      MakeShaper;
+     MakeComput;
 
-     _Comput.Run( 2048 div 32, 1024 div 32, 1 );
+     _Comput.Run( 10, 10, 1 );
 
      _Matery.Imager.ReceData;
 
