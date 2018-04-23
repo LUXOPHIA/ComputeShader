@@ -1,9 +1,11 @@
 object Form1: TForm1
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = Single
   Caption = 'ComputeShader'
-  ClientHeight = 710
-  ClientWidth = 995
+  ClientHeight = 420
+  ClientWidth = 830
   Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -11,40 +13,37 @@ object Form1: TForm1
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   DesignerMasterStyle = 0
-  inline GLViewer1: TGLViewer
-    Margins.Left = 10.000000000000000000
-    Margins.Top = 10.000000000000000000
-    Margins.Right = 10.000000000000000000
-    Margins.Bottom = 10.000000000000000000
+  object Image1: TImage
+    MultiResBitmap = <
+      item
+      end>
+    DisableInterpolation = True
     Position.X = 10.000000000000000000
     Position.Y = 10.000000000000000000
     Size.Width = 400.000000000000000000
     Size.Height = 400.000000000000000000
     Size.PlatformDefault = False
-    OnMouseDown = GLViewer1MouseDown
-    OnMouseMove = GLViewer1MouseMove
-    OnMouseUp = GLViewer1MouseUp
+    WrapMode = Stretch
   end
-  object Image1: TImage
+  object Image2: TImage
     MultiResBitmap = <
       item
       end>
+    DisableInterpolation = True
     Position.X = 420.000000000000000000
     Position.Y = 10.000000000000000000
     Size.Width = 400.000000000000000000
     Size.Height = 400.000000000000000000
     Size.PlatformDefault = False
+    WrapMode = Stretch
+    OnMouseDown = Image2MouseDown
+    OnMouseMove = Image2MouseMove
+    OnMouseUp = Image2MouseUp
   end
-  object Memo1: TMemo
-    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
-    DataDetectorTypes = []
-    Position.X = 825.000000000000000000
-    Position.Y = 10.000000000000000000
-    Size.Width = 160.000000000000000000
-    Size.Height = 401.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 1
-    Viewport.Width = 156.000000000000000000
-    Viewport.Height = 397.000000000000000000
+  object Timer1: TTimer
+    Interval = 10
+    OnTimer = Timer1Timer
+    Left = 25
+    Top = 25
   end
 end
