@@ -1,8 +1,8 @@
 ﻿#version 430
 
-layout( local_size_x = 10,
-        local_size_y = 10,
-        local_size_z =  1 ) in;
+#extension GL_ARB_compute_variable_group_size : enable
+
+layout( local_size_variable ) in;
 
 //############################################################################## ■
 
@@ -75,17 +75,19 @@ writeonly uniform image2D _MandImag;
 
 //############################################################################## ■
 
-TDoubleC ScrToCom( ivec2 S )
+TDoubleC ScreenToComplex( ivec2 S )
 {
+    const uvec3 _ItemSize = gl_LocalGroupSizeARB * gl_NumWorkGroups;
+
     TDoubleC Result;
 
-    Result.R = ( _MandArea.Max.R - _MandArea.Min.R ) / 400.0 * ( S.x + 0.5 ) + _MandArea.Min.R;
-    Result.I = ( _MandArea.Min.I - _MandArea.Max.I ) / 400.0 * ( S.y + 0.5 ) + _MandArea.Max.I;
+    Result.R = ( _MandArea.Max.R - _MandArea.Min.R ) / _ItemSize.x * ( S.x + 0.5 ) + _MandArea.Min.R;
+    Result.I = ( _MandArea.Min.I - _MandArea.Max.I ) / _ItemSize.y * ( S.y + 0.5 ) + _MandArea.Max.I;
 
     return Result;
 }
 
-vec4 ComToCol( TDoubleC C )
+vec4 ComplexToColor( TDoubleC C )
 {
     vec4 Color0 = vec4( 0, 0, 0, 1 );
     vec4 Color1 = vec4( 1, 1, 1, 1 );
@@ -108,9 +110,9 @@ void main()
 {
   ivec2 I = ivec2( gl_GlobalInvocationID.xy );
 
-  TDoubleC C = ScrToCom( I );
+  TDoubleC C = ScreenToComplex( I );
 
-  vec4 L = ComToCol( C );
+  vec4 L = ComplexToColor( C );
 
   imageStore( _MandImag, I, L );
 }
