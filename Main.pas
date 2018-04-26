@@ -20,7 +20,8 @@ uses
   LUX.GPU.OpenGL.Atom.Imager.D2.Preset,
   LUX.GPU.OpenGL.Comput,
   LUX.GPU.OpenGL.Render,
-  LUX.Complex;
+  LUX.Complex,
+  LUX.FMX.Controls;
 
 type
   TForm1 = class(TForm)
@@ -29,14 +30,10 @@ type
     Timer1: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure Image2MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
-    procedure Image2MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
-    procedure Image2MouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure Timer1Timer(Sender: TObject);
+    procedure Image2MouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
   private
     { private 宣言 }
-    _MouseS :TShiftState;
-    _MouseP :TPointF;
   public
     { public 宣言 }
     _ImageW   :Integer;
@@ -79,6 +76,14 @@ begin
 
      with _MandComp do
      begin
+          ItemsX := 16;
+          ItemsY := 16;
+          ItemsZ :=  1;
+
+          WorksX := _ImageW;
+          WorksY := _ImageH;
+          WorksZ :=       1;
+
           with ShaderC do
           begin
                Source.LoadFromFile( '..\..\_DATA\Mandelbrot.glsl' );
@@ -116,6 +121,14 @@ begin
 
      with _JuliComp do
      begin
+          ItemsX := 16;
+          ItemsY := 16;
+          ItemsZ :=  1;
+
+          WorksX := _ImageW;
+          WorksY := _ImageH;
+          WorksZ :=       1;
+
           with ShaderC do
           begin
                Source.LoadFromFile( '..\..\_DATA\Julia.glsl' );
@@ -143,14 +156,14 @@ end;
 
 procedure TForm1.DrawMand;
 begin
-     _MandComp.Run( _ImageW div 10, _ImageH div 10, 1 );
+     _MandComp.Run;
 
      _MandImag.ExportTo( Image2.Bitmap );
 end;
 
 procedure TForm1.DrawJuli;
 begin
-     _JuliComp.Run( _ImageW div 10, _ImageH div 10, 1 );
+     _JuliComp.Run;
 
      _JuliImag.ExportTo( Image1.Bitmap );
 end;
@@ -159,14 +172,11 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-     _ImageW := 400;
-     _ImageH := 400;
+     _ImageW := 512;
+     _ImageH := 512;
 
      InitMand;
      InitJuli;
-
-     _MouseP := TPointF.Create( 3/4 * Image2.Width,
-                                1/2 * Image2.Height );
 
      DrawMand;
      DrawJuli;
@@ -189,32 +199,50 @@ procedure TForm1.Timer1Timer(Sender: TObject);
 var
    C :TDoubleC;
 begin
-     C.R :=     2 * _MouseP.X / Image2.Width - 1.5;
-     C.I := 1 - 2 * _MouseP.Y / Image2.Height     ;
+     if Image2.Pressed then
+     begin
+          with Image2.MousePos do
+          begin
+               C.R :=     2 * X / Image2.Width - 1.5;
+               C.I := 1 - 2 * Y / Image2.Height     ;
+          end;
 
-     _JuliCons[ 0 ] := C;
+          _JuliCons[ 0 ] := C;
 
-     DrawJuli;
+          DrawJuli;
+     end;
 end;
 
 //------------------------------------------------------------------------------
 
-procedure TForm1.Image2MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+procedure TForm1.Image2MouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
+var
+   S :Double;
+   C :TDoubleC;
+   A :TDoubleAreaC;
 begin
-     _MouseS := Shift;
-     _MouseP := TPointF.Create( X, Y );
-end;
+     S := Power( 1.1, WheelDelta / 120 );
 
-procedure TForm1.Image2MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
-begin
-     if ssLeft in _MouseS then _MouseP := TPointF.Create( X, Y );
-end;
+     with _MandArea.Map do
+     begin
+          with Items[ 0 ] do
+          begin
+               with Image2.MousePos do
+               begin
+                    C.R := Min.R + SizeR * X / Image2.Width ;
+                    C.I := Max.I - SizeI * Y / Image2.Height;
+               end;
 
-procedure TForm1.Image2MouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
-begin
-     Image2MouseMove( Sender, Shift, X, Y );
+               A.Min := ( Min - C ) * S + C;
+               A.Max := ( Max - C ) * S + C;
+          end;
 
-     _MouseS := [];
+          Items[ 0 ] := A;
+
+          DisposeOf;
+     end;
+
+     DrawMand;
 end;
 
 end. //######################################################################### ■

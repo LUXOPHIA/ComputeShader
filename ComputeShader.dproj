@@ -386,6 +386,7 @@
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX.GPU.OpenGL\Atom\Buffer\LUX.GPU.OpenGL.Atom.Buffer.PixBuf.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Complex\LUX.Complex.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Complex\LUX.Complex.D1.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\FMX\LUX.FMX.Controls.pas"/>
         <None Include="_DATA\Mandelbrot.glsl"/>
         <None Include="_DATA\Julia.glsl"/>
         <BuildConfiguration Include="Release">

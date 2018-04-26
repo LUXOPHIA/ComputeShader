@@ -4,8 +4,8 @@ object Form1: TForm1
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = Single
   Caption = 'ComputeShader'
-  ClientHeight = 420
-  ClientWidth = 830
+  ClientHeight = 532
+  ClientWidth = 1054
   Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -20,8 +20,8 @@ object Form1: TForm1
     DisableInterpolation = True
     Position.X = 10.000000000000000000
     Position.Y = 10.000000000000000000
-    Size.Width = 400.000000000000000000
-    Size.Height = 400.000000000000000000
+    Size.Width = 512.000000000000000000
+    Size.Height = 512.000000000000000000
     Size.PlatformDefault = False
     WrapMode = Stretch
   end
@@ -30,15 +30,13 @@ object Form1: TForm1
       item
       end>
     DisableInterpolation = True
-    Position.X = 420.000000000000000000
+    Position.X = 532.000000000000000000
     Position.Y = 10.000000000000000000
-    Size.Width = 400.000000000000000000
-    Size.Height = 400.000000000000000000
+    Size.Width = 512.000000000000000000
+    Size.Height = 512.000000000000000000
     Size.PlatformDefault = False
     WrapMode = Stretch
-    OnMouseDown = Image2MouseDown
-    OnMouseMove = Image2MouseMove
-    OnMouseUp = Image2MouseUp
+    OnMouseWheel = Image2MouseWheel
   end
   object Timer1: TTimer
     Interval = 10
