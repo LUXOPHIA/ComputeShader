@@ -21,17 +21,16 @@ uses
   LUX.GPU.OpenGL.Comput,
   LUX.GPU.OpenGL.Render,
   LUX.Complex,
-  LUX.FMX.Controls;
+  LUX.FMX.Controls, FMX.Controls.Presentation, FMX.StdCtrls;
 
 type
   TForm1 = class(TForm)
     Image1: TImage;
-    Image2: TImage;
     Timer1: TTimer;
+    Panel1: TPanel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
-    procedure Image2MouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
+    procedure Image1MouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
   private
     { private 宣言 }
   public
@@ -41,14 +40,9 @@ type
     _MandComp :TGLComput;
     _MandArea :TGLStoBuf<TDoubleAreaC>;
     _MandImag :TGLBricer2D_TAlphaColorF;
-    _JuliComp :TGLComput;
-    _JuliCons :TGLStoBuf<TDoubleC>;
-    _JuliImag :TGLBricer2D_TAlphaColorF;
     ///// メソッド
     procedure InitMand;
-    procedure InitJuli;
     procedure DrawMand;
-    procedure DrawJuli;
   end;
 
 var
@@ -76,20 +70,15 @@ begin
 
      with _MandComp do
      begin
-          ItemsX := 16;
-          ItemsY := 16;
+          ItemsX := 20;
+          ItemsY := 20;
           ItemsZ :=  1;
 
           WorksX := _ImageW;
           WorksY := _ImageH;
           WorksZ :=       1;
 
-          with ShaderC do
-          begin
-               Source.LoadFromFile( '..\..\_DATA\Mandelbrot.glsl' );
-
-               Assert( Status, Errors.Text );
-          end;
+          ShaderC.Source.LoadFromFile( '..\..\_DATA\Mandelbrot.glsl' );
 
           with Engine do Assert( Status, Errors.Text );
 
@@ -98,7 +87,7 @@ begin
           Imagers.Add( '_MandImag', _MandImag );
      end;
 
-     _MandArea[ 0 ] := TDoubleAreaC.Create( -1.5, -1.0, +0.5, +1.0 );
+     _MandArea[ 0 ] := TDoubleAreaC.Create( -2, -1.5, +2, +1.5 );
 
      with _MandImag do
      begin
@@ -112,74 +101,24 @@ begin
      end;
 end;
 
-procedure TForm1.InitJuli;
-begin
-     _JuliComp := TGLComput.Create;
-
-     _JuliCons := TGLStoBuf<TDoubleC>.Create( GL_STATIC_DRAW );
-     _JuliImag := TGLBricer2D_TAlphaColorF.Create;
-
-     with _JuliComp do
-     begin
-          ItemsX := 16;
-          ItemsY := 16;
-          ItemsZ :=  1;
-
-          WorksX := _ImageW;
-          WorksY := _ImageH;
-          WorksZ :=       1;
-
-          with ShaderC do
-          begin
-               Source.LoadFromFile( '..\..\_DATA\Julia.glsl' );
-
-               Assert( Status, Errors.Text );
-          end;
-
-          with Engine do Assert( Status, Errors.Text );
-
-          Buffers.Add( 'TJuliCons', _JuliCons );
-
-          Imagers.Add( '_JuliImag', _JuliImag );
-     end;
-
-     with _JuliImag.Texels do
-     begin
-          BricsX := _ImageW;
-          BricsY := _ImageH;
-     end;
-
-     _JuliImag.SendData;
-end;
-
 //------------------------------------------------------------------------------
 
 procedure TForm1.DrawMand;
 begin
      _MandComp.Run;
 
-     _MandImag.ExportTo( Image2.Bitmap );
-end;
-
-procedure TForm1.DrawJuli;
-begin
-     _JuliComp.Run;
-
-     _JuliImag.ExportTo( Image1.Bitmap );
+     _MandImag.ExportTo( Image1.Bitmap );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-     _ImageW := 512;
-     _ImageH := 512;
+     _ImageW := 800;
+     _ImageH := 600;
 
      InitMand;
-     InitJuli;
-
      DrawMand;
-     DrawJuli;
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -187,35 +126,11 @@ begin
      _MandComp.DisposeOf;
      _MandArea.DisposeOf;
      _MandImag.DisposeOf;
-
-     _JuliComp.DisposeOf;
-     _JuliCons.DisposeOf;
-     _JuliImag.DisposeOf;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-procedure TForm1.Timer1Timer(Sender: TObject);
-var
-   C :TDoubleC;
-begin
-     if Image2.Pressed then
-     begin
-          with Image2.MousePos do
-          begin
-               C.R :=     2 * X / Image2.Width - 1.5;
-               C.I := 1 - 2 * Y / Image2.Height     ;
-          end;
-
-          _JuliCons[ 0 ] := C;
-
-          DrawJuli;
-     end;
-end;
-
-//------------------------------------------------------------------------------
-
-procedure TForm1.Image2MouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
+procedure TForm1.Image1MouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
 var
    S :Double;
    C :TDoubleC;
@@ -227,10 +142,10 @@ begin
      begin
           with Items[ 0 ] do
           begin
-               with Image2.MousePos do
+               with Image1.MousePos do
                begin
-                    C.R := Min.R + SizeR * X / Image2.Width ;
-                    C.I := Max.I - SizeI * Y / Image2.Height;
+                    C.R := Min.R + SizeR * X / Image1.Width ;
+                    C.I := Max.I - SizeI * Y / Image1.Height;
                end;
 
                A.Min := ( Min - C ) * S + C;

@@ -1,11 +1,10 @@
 object Form1: TForm1
   Left = 0
   Top = 0
-  BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = Single
   Caption = 'ComputeShader'
-  ClientHeight = 532
-  ClientWidth = 1054
+  ClientHeight = 727
+  ClientWidth = 820
   Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -18,30 +17,31 @@ object Form1: TForm1
       item
       end>
     DisableInterpolation = True
+    Margins.Left = 10.000000000000000000
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Margins.Bottom = 10.000000000000000000
     Position.X = 10.000000000000000000
     Position.Y = 10.000000000000000000
-    Size.Width = 512.000000000000000000
-    Size.Height = 512.000000000000000000
+    Size.Width = 800.000000000000000000
+    Size.Height = 600.000000000000000000
     Size.PlatformDefault = False
     WrapMode = Stretch
-  end
-  object Image2: TImage
-    MultiResBitmap = <
-      item
-      end>
-    DisableInterpolation = True
-    Position.X = 532.000000000000000000
-    Position.Y = 10.000000000000000000
-    Size.Width = 512.000000000000000000
-    Size.Height = 512.000000000000000000
-    Size.PlatformDefault = False
-    WrapMode = Stretch
-    OnMouseWheel = Image2MouseWheel
+    OnMouseWheel = Image1MouseWheel
   end
   object Timer1: TTimer
     Interval = 10
-    OnTimer = Timer1Timer
     Left = 25
     Top = 25
+  end
+  object Panel1: TPanel
+    Align = Bottom
+    Margins.Top = -10.000000000000000000
+    Position.Y = 655.000000000000000000
+    Size.Width = 820.000000000000000000
+    Size.Height = 72.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'pushpanel'
+    TabOrder = 2
   end
 end

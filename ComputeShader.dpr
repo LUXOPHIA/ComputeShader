@@ -67,7 +67,8 @@ uses
   LUX.GPU.OpenGL.Atom.Buffer.PixBuf in '_LIBRARY\LUXOPHIA\LUX.GPU.OpenGL\Atom\Buffer\LUX.GPU.OpenGL.Atom.Buffer.PixBuf.pas',
   LUX.Complex in '_LIBRARY\LUXOPHIA\LUX\Complex\LUX.Complex.pas',
   LUX.Complex.D1 in '_LIBRARY\LUXOPHIA\LUX\Complex\LUX.Complex.D1.pas',
-  LUX.FMX.Controls in '_LIBRARY\LUXOPHIA\LUX\FMX\LUX.FMX.Controls.pas';
+  LUX.FMX.Controls in '_LIBRARY\LUXOPHIA\LUX\FMX\LUX.FMX.Controls.pas',
+  LUX.Data.Lattice in '_LIBRARY\LUXOPHIA\LUX\Data\LUX.Data.Lattice.pas';
 
 {$R *.res}
 
