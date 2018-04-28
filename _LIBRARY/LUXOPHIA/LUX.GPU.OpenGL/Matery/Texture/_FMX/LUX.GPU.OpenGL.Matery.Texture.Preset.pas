@@ -108,7 +108,7 @@ begin
 
      with _Engine do
      begin
-          with Texturs do
+          with Textures do
           begin
                Add( 0{BinP}, '_Imager'{Name} );
           end;
@@ -161,7 +161,7 @@ begin
 
      with _Engine do
      begin
-          with Texturs do
+          with Textures do
           begin
                Add( 0{BinP}, '_Imager'{Name} );
           end;
