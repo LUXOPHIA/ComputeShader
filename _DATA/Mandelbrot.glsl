@@ -66,12 +66,12 @@ struct TAreaC
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【外部変数】
 
-layout( std430 ) buffer TMandArea
+layout( std430 ) buffer TStoBuf
 {
     TAreaC _MandArea;
 };
 
-writeonly uniform image2D _MandImag;
+writeonly uniform image2D _CelIma;
 
 //############################################################################## ■
 
@@ -114,7 +114,7 @@ void main()
 
   vec4 L = ComplexToColor( C );
 
-  imageStore( _MandImag, I, L );
+  imageStore( _CelIma, I, L );
 }
 
 //############################################################################## ■

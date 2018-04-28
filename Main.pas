@@ -35,11 +35,11 @@ type
     { private 宣言 }
   public
     { public 宣言 }
-    _ImageW   :Integer;
-    _ImageH   :Integer;
-    _MandComp :TGLComput;
-    _MandArea :TGLStoBuf<TDoubleAreaC>;
-    _MandImag :TGLBricer2D_TAlphaColorF;
+    _ImageW :Integer;
+    _ImageH :Integer;
+    _Comput :TGLComput;
+    _StoBuf :TGLStoBuf<TDoubleAreaC>;
+    _CelIma :TGLCelTex2D_TAlphaColorF;
     ///// メソッド
     procedure InitMand;
     procedure DrawMand;
@@ -62,13 +62,13 @@ uses System.Math;
 
 procedure TForm1.InitMand;
 begin
-     _MandComp := TGLComput.Create;
+     _Comput := TGLComput.Create;
 
-     _MandArea := TGLStoBuf<TDoubleAreaC>.Create( GL_STATIC_DRAW );
+     _StoBuf := TGLStoBuf<TDoubleAreaC>.Create( GL_STATIC_DRAW );
 
-     _MandImag := TGLBricer2D_TAlphaColorF.Create;
+     _CelIma := TGLCelTex2D_TAlphaColorF.Create;
 
-     with _MandComp do
+     with _Comput do
      begin
           ItemsX := 20;
           ItemsY := 20;
@@ -82,19 +82,19 @@ begin
 
           with Engine do Assert( Status, Errors.Text );
 
-          Buffers.Add( 'TMandArea', _MandArea );
+          Buffers.Add( 'TStoBuf', _StoBuf );
 
-          Imagers.Add( '_MandImag', _MandImag );
+          Texturs.Add( '_CellImag', _CelIma );
      end;
 
-     _MandArea[ 0 ] := TDoubleAreaC.Create( -2, -1.5, +2, +1.5 );
+     _StoBuf[ 0 ] := TDoubleAreaC.Create( -2, -1.5, +2, +1.5 );
 
-     with _MandImag do
+     with _CelIma do
      begin
           with Texels do
           begin
-               BricsX := _ImageW;
-               BricsY := _ImageH;
+               CellsX := _ImageW;
+               CellsY := _ImageH;
           end;
 
           SendData;
@@ -105,9 +105,9 @@ end;
 
 procedure TForm1.DrawMand;
 begin
-     _MandComp.Run;
+     _Comput.Run;
 
-     _MandImag.ExportTo( Image1.Bitmap );
+     _CelIma.ExportTo( Image1.Bitmap );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -123,9 +123,9 @@ end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
-     _MandComp.DisposeOf;
-     _MandArea.DisposeOf;
-     _MandImag.DisposeOf;
+     _Comput.DisposeOf;
+     _StoBuf.DisposeOf;
+     _CelIma.DisposeOf;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -138,7 +138,7 @@ var
 begin
      S := Power( 1.1, WheelDelta / 120 );
 
-     with _MandArea.Map do
+     with _StoBuf.Map do
      begin
           with Items[ 0 ] do
           begin
