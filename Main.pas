@@ -84,7 +84,7 @@ begin
 
           Buffers.Add( 'TStoBuf', _StoBuf );
 
-          Texturs.Add( '_CellImag', _CelIma );
+          Images.Add( '_CellImag', _CelIma );
      end;
 
      _StoBuf[ 0 ] := TDoubleAreaC.Create( -2, -1.5, +2, +1.5 );
