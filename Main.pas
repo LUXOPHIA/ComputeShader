@@ -16,7 +16,7 @@ uses
   LUX.GPU.OpenGL.Camera,
   LUX.GPU.OpenGL.Shaper,
   LUX.GPU.OpenGL.Matery,
-  LUX.GPU.OpenGL.Matery.Texture.Preset,
+  LUX.GPU.OpenGL.Matery.Textur.Preset,
   LUX.GPU.OpenGL.Atom.Textur.D2.Preset,
   LUX.GPU.OpenGL.Comput,
   LUX.GPU.OpenGL.Render,
