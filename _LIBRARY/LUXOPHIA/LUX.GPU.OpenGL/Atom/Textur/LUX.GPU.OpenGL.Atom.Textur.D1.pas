@@ -14,9 +14,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLPoiTex1D<_TTexel_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLPoiTex1D<_TItem_>
 
-     TGLPoiTex1D<_TTexel_:record;_TImager_:TGLPoiIma1D<_TTexel_>,constructor> = class( TGLTextur<_TTexel_,TPoinArray1D<_TTexel_>,_TImager_> )
+     TGLPoiTex1D<_TItem_:record;_TImager_:TGLPoiIma1D<_TItem_>,constructor> = class( TGLTextur<_TItem_,TPoinArray1D<_TItem_>,_TImager_> )
      private
      protected
      public
@@ -24,9 +24,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        destructor Destroy; override;
      end;
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLCelTex1D<_TTexel_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLCelTex1D<_TItem_>
 
-     TGLCelTex1D<_TTexel_:record;_TImager_:TGLCelIma1D<_TTexel_>,constructor> = class( TGLTextur<_TTexel_,TCellArray1D<_TTexel_>,_TImager_> )
+     TGLCelTex1D<_TItem_:record;_TImager_:TGLCelIma1D<_TItem_>,constructor> = class( TGLTextur<_TItem_,TCellArray1D<_TItem_>,_TImager_> )
      private
      protected
      public
@@ -46,7 +46,7 @@ implementation //###############################################################
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLPoiTex1D<_TTexel_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLPoiTex1D<_TItem_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -54,7 +54,7 @@ implementation //###############################################################
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TGLPoiTex1D<_TTexel_,_TImager_>.Create;
+constructor TGLPoiTex1D<_TItem_,_TImager_>.Create;
 begin
      inherited;
 
@@ -64,13 +64,13 @@ begin
      end;
 end;
 
-destructor TGLPoiTex1D<_TTexel_,_TImager_>.Destroy;
+destructor TGLPoiTex1D<_TItem_,_TImager_>.Destroy;
 begin
 
      inherited;
 end;
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLCelTex1D<_TTexel_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLCelTex1D<_TItem_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -78,7 +78,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TGLCelTex1D<_TTexel_,_TImager_>.Create;
+constructor TGLCelTex1D<_TItem_,_TImager_>.Create;
 begin
      inherited;
 
@@ -88,7 +88,7 @@ begin
      end;
 end;
 
-destructor TGLCelTex1D<_TTexel_,_TImager_>.Destroy;
+destructor TGLCelTex1D<_TItem_,_TImager_>.Destroy;
 begin
 
      inherited;
