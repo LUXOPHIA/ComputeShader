@@ -5,23 +5,13 @@ interface //####################################################################
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
-  FMX.Objects,
+  FMX.Objects, LUX.FMX.Controls, FMX.Controls.Presentation, FMX.StdCtrls,
   Winapi.OpenGL, Winapi.OpenGLext,
-  LUX, LUX.D1, LUX.D2, LUX.D3, LUX.M4,
+  LUX, LUX.D1, LUX.D2, LUX.D3, LUX.M4, LUX.Complex,
   LUX.GPU.OpenGL,
-  LUX.GPU.OpenGL.Viewer,
-  LUX.GPU.OpenGL.Atom.Shader,
   LUX.GPU.OpenGL.Atom.Buffer.StoBuf,
-  LUX.GPU.OpenGL.Scener,
-  LUX.GPU.OpenGL.Camera,
-  LUX.GPU.OpenGL.Shaper,
-  LUX.GPU.OpenGL.Matery,
-  LUX.GPU.OpenGL.Matery.Textur.Preset,
-  LUX.GPU.OpenGL.Atom.Textur.D2.Preset,
-  LUX.GPU.OpenGL.Comput,
-  LUX.GPU.OpenGL.Render,
-  LUX.Complex,
-  LUX.FMX.Controls, FMX.Controls.Presentation, FMX.StdCtrls;
+  LUX.GPU.OpenGL.Atom.Imager.D2.Preset,
+  LUX.GPU.OpenGL.Comput;
 
 type
   TForm1 = class(TForm)
@@ -37,12 +27,13 @@ type
     { public 宣言 }
     _ImageW :Integer;
     _ImageH :Integer;
+    _AreaC  :TDoubleAreaC;
     _Comput :TGLComput;
-    _StoBuf :TGLStoBuf<TDoubleAreaC>;
-    _CelIma :TGLCelTex2D_TAlphaColorF;
+    _Buffer :TGLStoBuf<TDoubleAreaC>;
+    _Imager :TGLCelIma2D_TAlphaColorF;
     ///// メソッド
-    procedure InitMand;
-    procedure DrawMand;
+    procedure Init;
+    procedure Draw;
   end;
 
 var
@@ -60,13 +51,12 @@ uses System.Math;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TForm1.InitMand;
+procedure TForm1.Init;
 begin
-     _Comput := TGLComput.Create;
+     _ImageW := 800;
+     _ImageH := 600;
 
-     _StoBuf := TGLStoBuf<TDoubleAreaC>.Create( GL_STATIC_DRAW );
-
-     _CelIma := TGLCelTex2D_TAlphaColorF.Create;
+     _AreaC := TDoubleAreaC.Create( -2, -1.5, +2, +1.5 );
 
      with _Comput do
      begin
@@ -82,16 +72,16 @@ begin
 
           with Engine do Assert( Status, Errors.Text );
 
-          Buffers.Add( 'TStoBuf', _StoBuf );
+          Buffers.Add( 'TStoBuf', _Buffer );
 
-          Images.Add( '_CellImag', _CelIma );
+          Imagers.Add( '_CellImag', _Imager );
      end;
 
-     _StoBuf[ 0 ] := TDoubleAreaC.Create( -2, -1.5, +2, +1.5 );
+     _Buffer[ 0 ] := _AreaC;
 
-     with _CelIma do
+     with _Imager do
      begin
-          with Texels do
+          with Grider do
           begin
                CellsX := _ImageW;
                CellsY := _ImageH;
@@ -103,29 +93,30 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TForm1.DrawMand;
+procedure TForm1.Draw;
 begin
      _Comput.Run;
 
-     _CelIma.ExportTo( Image1.Bitmap );
+     _Imager.ExportTo( Image1.Bitmap );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-     _ImageW := 800;
-     _ImageH := 600;
+     _Comput := TGLComput.Create;
+     _Buffer := TGLStoBuf<TDoubleAreaC>.Create( GL_STATIC_DRAW );
+     _Imager := TGLCelIma2D_TAlphaColorF.Create;
 
-     InitMand;
-     DrawMand;
+     Init;
+     Draw;
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
      _Comput.DisposeOf;
-     _StoBuf.DisposeOf;
-     _CelIma.DisposeOf;
+     _Buffer.DisposeOf;
+     _Imager.DisposeOf;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -134,30 +125,24 @@ procedure TForm1.Image1MouseWheel(Sender: TObject; Shift: TShiftState; WheelDelt
 var
    S :Double;
    C :TDoubleC;
-   A :TDoubleAreaC;
 begin
      S := Power( 1.1, WheelDelta / 120 );
 
-     with _StoBuf.Map do
+     with _AreaC do
      begin
-          with Items[ 0 ] do
+          with Image1.MousePos do
           begin
-               with Image1.MousePos do
-               begin
-                    C.R := Min.R + SizeR * X / Image1.Width ;
-                    C.I := Max.I - SizeI * Y / Image1.Height;
-               end;
-
-               A.Min := ( Min - C ) * S + C;
-               A.Max := ( Max - C ) * S + C;
+               C.R := Min.R + SizeR * X / Image1.Width ;
+               C.I := Max.I - SizeI * Y / Image1.Height;
           end;
 
-          Items[ 0 ] := A;
-
-          DisposeOf;
+          Min := ( Min - C ) * S + C;
+          Max := ( Max - C ) * S + C;
      end;
 
-     DrawMand;
+     _Buffer[ 0 ] := _AreaC;
+
+     Draw;
 end;
 
 end. //######################################################################### ■
