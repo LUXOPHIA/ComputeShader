@@ -14,47 +14,19 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLTextur2D<_TTexel_,_TTexels_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLPoiTex2D<_TTexel_>
 
-     IGLTextur2D = interface( IGLTextur )
-     ['{FE12BAB0-3DF5-4D47-B97E-7BC1059557F3}']
-     {protected}
-     {public}
-       ///// メソッド
-       procedure SendData;
-     end;
-
-     //-------------------------------------------------------------------------
-
-     TGLTextur2D<_TTexel_:record;_TTexels_:constructor,TArray2D<_TTexel_>> = class( TGLImager2D<_TTexel_,_TTexels_>, IGLTextur2D )
+     TGLPoiTex2D<_TTexel_:record;_TImager_:TGLPoiIma2D<_TTexel_>,constructor> = class( TGLTextur<_TTexel_,TPoinArray2D<_TTexel_>,_TImager_> )
      private
      protected
-       _Samplr :TGLSamplr;
-       ///// アクセス
-       function GetSamplr :TGLSamplr;
      public
        constructor Create;
        destructor Destroy; override;
-       ///// プロパティ
-       property Samplr :TGLSamplr read GetSamplr;
-       ///// メソッド
-       procedure Use( const BindI_:GLuint ); override;
-       procedure Unuse( const BindI_:GLuint ); override;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLCelTex2D<_TTexel_>
 
-     TGLCelTex2D<_TTexel_:record> = class( TGLTextur2D<_TTexel_,TCellArray2D<_TTexel_>> )
-     private
-     protected
-     public
-       constructor Create;
-       destructor Destroy; override;
-     end;
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLPoiTex2D<_TTexel_>
-
-     TGLPoiTex2D<_TTexel_:record> = class( TGLTextur2D<_TTexel_,TPoinArray2D<_TTexel_>> )
+     TGLCelTex2D<_TTexel_:record;_TImager_:TGLCelIma2D<_TTexel_>,constructor> = class( TGLTextur<_TTexel_,TCellArray2D<_TTexel_>,_TImager_> )
      private
      protected
      public
@@ -70,53 +42,31 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 implementation //############################################################### ■
 
-uses System.Math;
-
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLTextur2D<_TTexel_,_TTexels_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLPoiTex2D<_TTexel_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
 
-/////////////////////////////////////////////////////////////////////// アクセス
-
-function TGLTextur2D<_TTexel_,_TTexels_>.GetSamplr :TGLSamplr;
-begin
-     Result := _Samplr;
-end;
-
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TGLTextur2D<_TTexel_,_TTexels_>.Create;
+constructor TGLPoiTex2D<_TTexel_,_TImager_>.Create;
 begin
      inherited;
 
-     _Samplr := TGLSamplr.Create;
+     with _Samplr do
+     begin
+          WrapU := GL_CLAMP_TO_EDGE;
+          WrapV := GL_CLAMP_TO_EDGE;
+     end;
 end;
 
-destructor TGLTextur2D<_TTexel_,_TTexels_>.Destroy;
+destructor TGLPoiTex2D<_TTexel_,_TImager_>.Destroy;
 begin
-     _Samplr.DisposeOf;
-
-     inherited;
-end;
-
-/////////////////////////////////////////////////////////////////////// メソッド
-
-procedure TGLTextur2D<_TTexel_,_TTexels_>.Use( const BindI_:GLuint );
-begin
-     inherited;
-
-     _Samplr.Use( BindI_ );
-end;
-
-procedure TGLTextur2D<_TTexel_,_TTexels_>.Unuse( const BindI_:GLuint );
-begin
-     _Samplr.Unuse( BindI_ );
 
      inherited;
 end;
@@ -129,7 +79,7 @@ end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TGLCelTex2D<_TTexel_>.Create;
+constructor TGLCelTex2D<_TTexel_,_TImager_>.Create;
 begin
      inherited;
 
@@ -140,32 +90,7 @@ begin
      end;
 end;
 
-destructor TGLCelTex2D<_TTexel_>.Destroy;
-begin
-
-     inherited;
-end;
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLPoiTex2D<_TTexel_>
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
-
-//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
-
-constructor TGLPoiTex2D<_TTexel_>.Create;
-begin
-     inherited;
-
-     with _Samplr do
-     begin
-          WrapU := GL_CLAMP_TO_EDGE;
-          WrapV := GL_CLAMP_TO_EDGE;
-     end;
-end;
-
-destructor TGLPoiTex2D<_TTexel_>.Destroy;
+destructor TGLCelTex2D<_TTexel_,_TImager_>.Destroy;
 begin
 
      inherited;
