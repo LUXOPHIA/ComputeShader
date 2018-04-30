@@ -86,16 +86,16 @@ var
    B :TBitmapData;
    X, Y :Integer;
 begin
-     _Texels.PoinsX := BMP_.Width ;
-     _Texels.PoinsY := BMP_.Height;
+     _Grider.PoinsX := BMP_.Width ;
+     _Grider.PoinsY := BMP_.Height;
 
      BMP_.Map( TMapAccess.Read, B );
 
-     for Y := 0 to _Texels.PoinsY-1 do
+     for Y := 0 to _Grider.PoinsY-1 do
      begin
-          for X := 0 to _Texels.PoinsX-1 do
+          for X := 0 to _Grider.PoinsX-1 do
           begin
-               Texels[ X, Y ] := TAlphaColorF.Create( B.GetPixel( X, Y ) );
+               _Grider[ X, Y ] := TAlphaColorF.Create( B.GetPixel( X, Y ) );
           end;
      end;
 
@@ -111,15 +111,15 @@ var
 begin
      ReceData;
 
-     BMP_.SetSize( _Texels.PoinsX, _Texels.PoinsY );
+     BMP_.SetSize( _Grider.PoinsX, _Grider.PoinsY );
 
      BMP_.Map( TMapAccess.Write, B );
 
-     for Y := 0 to _Texels.PoinsY-1 do
+     for Y := 0 to _Grider.PoinsY-1 do
      begin
-          for X := 0 to _Texels.PoinsX-1 do
+          for X := 0 to _Grider.PoinsX-1 do
           begin
-               B.SetPixel( X, Y, Texels[ X, Y ].ToAlphaColor );
+               B.SetPixel( X, Y, _Grider[ X, Y ].ToAlphaColor );
           end;
      end;
 
@@ -184,16 +184,16 @@ var
    B :TBitmapData;
    X, Y :Integer;
 begin
-     _Texels.CellsX := BMP_.Width ;
-     _Texels.CellsY := BMP_.Height;
+     _Grider.CellsX := BMP_.Width ;
+     _Grider.CellsY := BMP_.Height;
 
      BMP_.Map( TMapAccess.Read, B );
 
-     for Y := 0 to _Texels.CellsY-1 do
+     for Y := 0 to _Grider.CellsY-1 do
      begin
-          for X := 0 to _Texels.CellsX-1 do
+          for X := 0 to _Grider.CellsX-1 do
           begin
-               Texels[ X, Y ] := TAlphaColorF.Create( B.GetPixel( X, Y ) );
+               _Grider[ X, Y ] := TAlphaColorF.Create( B.GetPixel( X, Y ) );
           end;
      end;
 
@@ -209,15 +209,15 @@ var
 begin
      ReceData;
 
-     BMP_.SetSize( _Texels.CellsX, _Texels.CellsY );
+     BMP_.SetSize( _Grider.CellsX, _Grider.CellsY );
 
      BMP_.Map( TMapAccess.Write, B );
 
-     for Y := 0 to _Texels.CellsY-1 do
+     for Y := 0 to _Grider.CellsY-1 do
      begin
-          for X := 0 to _Texels.CellsX-1 do
+          for X := 0 to _Grider.CellsX-1 do
           begin
-               B.SetPixel( X, Y, Texels[ X, Y ].ToAlphaColor );
+               B.SetPixel( X, Y, _Grider[ X, Y ].ToAlphaColor );
           end;
      end;
 

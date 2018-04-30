@@ -86,13 +86,13 @@ var
    B :TBitmapData;
    X :Integer;
 begin
-     _Texels.PoinsX := BMP_.Width;
+     _Grider.PoinsX := BMP_.Width;
 
      BMP_.Map( TMapAccess.Read, B );
 
-     for X := 0 to _Texels.PoinsX-1 do
+     for X := 0 to _Grider.PoinsX-1 do
      begin
-          _Texels[ X ] := TAlphaColorF.Create( B.GetPixel( X, 0 ) );
+          _Grider[ X ] := TAlphaColorF.Create( B.GetPixel( X, 0 ) );
      end;
 
      BMP_.Unmap( B );
@@ -105,13 +105,13 @@ var
    B :TBitmapData;
    X :Integer;
 begin
-     BMP_.SetSize( _Texels.PoinsX, 1 );
+     BMP_.SetSize( _Grider.PoinsX, 1 );
 
      BMP_.Map( TMapAccess.Write, B );
 
-     for X := 0 to _Texels.PoinsX-1 do
+     for X := 0 to _Grider.PoinsX-1 do
      begin
-          B.SetPixel( X, 0, _Texels[ X ].ToAlphaColor );
+          B.SetPixel( X, 0, _Grider[ X ].ToAlphaColor );
      end;
 
      BMP_.Unmap( B );
@@ -175,13 +175,13 @@ var
    B :TBitmapData;
    X :Integer;
 begin
-     _Texels.CellsX := BMP_.Width;
+     _Grider.CellsX := BMP_.Width;
 
      BMP_.Map( TMapAccess.Read, B );
 
-     for X := 0 to _Texels.CellsX-1 do
+     for X := 0 to _Grider.CellsX-1 do
      begin
-          _Texels[ X ] := TAlphaColorF.Create( B.GetPixel( X, 0 ) );
+          _Grider[ X ] := TAlphaColorF.Create( B.GetPixel( X, 0 ) );
      end;
 
      BMP_.Unmap( B );
@@ -194,13 +194,13 @@ var
    B :TBitmapData;
    X :Integer;
 begin
-     BMP_.SetSize( _Texels.CellsX, 1 );
+     BMP_.SetSize( _Grider.CellsX, 1 );
 
      BMP_.Map( TMapAccess.Write, B );
 
-     for X := 0 to _Texels.CellsX-1 do
+     for X := 0 to _Grider.CellsX-1 do
      begin
-          B.SetPixel( X, 0, _Texels[ X ].ToAlphaColor );
+          B.SetPixel( X, 0, _Grider[ X ].ToAlphaColor );
      end;
 
      BMP_.Unmap( B );
