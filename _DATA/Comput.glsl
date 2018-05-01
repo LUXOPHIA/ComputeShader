@@ -69,7 +69,7 @@ struct TAreaC
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【外部変数】
 
-layout( std430 ) buffer TStoBuf
+layout( std430 ) buffer TBuffer
 {
     TAreaC _MandArea;
 };
