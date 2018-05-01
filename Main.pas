@@ -5,9 +5,9 @@ interface //####################################################################
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
-  FMX.Objects, LUX.FMX.Controls, FMX.Controls.Presentation, FMX.StdCtrls,
+  FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects,
   Winapi.OpenGL, Winapi.OpenGLext,
-  LUX, LUX.D1, LUX.D2, LUX.D3, LUX.M4, LUX.Complex,
+  LUX, LUX.D1, LUX.D2, LUX.D3, LUX.M4, LUX.Complex, LUX.FMX.Controls,
   LUX.GPU.OpenGL,
   LUX.GPU.OpenGL.Atom.Buffer.StoBuf,
   LUX.GPU.OpenGL.Atom.Imager.D2.Preset,
@@ -16,7 +16,6 @@ uses
 type
   TForm1 = class(TForm)
     Image1: TImage;
-    Timer1: TTimer;
     Panel1: TPanel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
