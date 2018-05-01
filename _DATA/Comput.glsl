@@ -74,7 +74,9 @@ layout( std430 ) buffer TStoBuf
     TAreaC _MandArea;
 };
 
-writeonly uniform image2D _CelIma;
+writeonly uniform image2D _Imager;
+
+uniform sampler2D _Textur;
 
 //############################################################################## ■
 
@@ -93,19 +95,16 @@ TDoubleC ScreenToComplex( ivec2 S )
 
 vec4 ComplexToColor( TDoubleC C )
 {
-    vec4 Color0 = vec4( 0, 0, 0, 1 );
-    vec4 Color1 = vec4( 1, 1, 1, 1 );
-
     TDoubleC Z = TDoubleC( 0, 0 );
 
     for ( int N = 1; N < 256; N++ )
     {
         Z = Add( Pow2( Z ), C );
 
-        if ( Abs( Z ) > 2 ) return ( Color1 - Color0 ) * N / 256 + Color0;
+        if ( Abs( Z ) > 2 ) return texture( _Textur, vec2( N / 255.0, 0 ) );
     }
 
-    return Color1;
+    return texture( _Textur, vec2( 1, 0 ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +117,7 @@ void main()
 
   vec4 L = ComplexToColor( C );
 
-  imageStore( _CelIma, I, L );
+  imageStore( _Imager, I, L );
 }
 
 //############################################################################## ■
