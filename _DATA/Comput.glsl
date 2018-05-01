@@ -97,11 +97,11 @@ vec4 ComplexToColor( TDoubleC C )
 {
     TDoubleC Z = TDoubleC( 0, 0 );
 
-    for ( int N = 1; N < 256; N++ )
+    for ( int N = 1; N < 500; N++ )
     {
         Z = Add( Pow2( Z ), C );
 
-        if ( Abs( Z ) > 2 ) return texture( _Textur, vec2( N / 255.0, 0 ) );
+        if ( Abs( Z ) > 2 ) return texture( _Textur, vec2( N / 500.0, 0 ) );
     }
 
     return texture( _Textur, vec2( 1, 0 ) );
