@@ -4,7 +4,7 @@ object Form1: TForm1
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = Single
   Caption = 'ComputeShader'
-  ClientHeight = 660
+  ClientHeight = 645
   ClientWidth = 620
   Position = ScreenCenter
   FormFactor.Width = 320
@@ -34,7 +34,7 @@ object Form1: TForm1
     Margins.Top = -10.000000000000000000
     Position.Y = 610.000000000000000000
     Size.Width = 620.000000000000000000
-    Size.Height = 50.000000000000000000
+    Size.Height = 35.000000000000000000
     Size.PlatformDefault = False
     StyleLookup = 'pushpanel'
     TabOrder = 2
@@ -48,7 +48,7 @@ object Form1: TForm1
       Margins.Right = 10.000000000000000000
       Margins.Bottom = 10.000000000000000000
       Size.Width = 600.000000000000000000
-      Size.Height = 30.000000000000000000
+      Size.Height = 15.000000000000000000
       Size.PlatformDefault = False
       WrapMode = Stretch
     end

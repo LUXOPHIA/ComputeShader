@@ -79,7 +79,7 @@ begin
 
           with Engine do Assert( Status, Errors.Text );
 
-          Buffers.Add( 'TStoBuf', _Buffer );
+          Buffers.Add( 'TBuffer', _Buffer );
           Imagers.Add( '_Imager', _Imager );
           Texturs.Add( '_Textur', _Textur );
      end;
@@ -88,7 +88,7 @@ begin
 
      Image2.Bitmap.LoadFromFile( '..\..\_DATA\Textur.png' );
 
-     _Textur.Imager.ImportFrom( Image2.Bitmap );
+     _Textur.Imager.CopyFrom( Image2.Bitmap );
 
      with _Imager do
      begin
@@ -109,7 +109,7 @@ begin
      //_Comput.RunARB;
      _Comput.Run;
 
-     _Imager.ExportTo( Image1.Bitmap );
+     _Imager.CopyTo( Image1.Bitmap );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
