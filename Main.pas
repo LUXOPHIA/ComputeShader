@@ -53,22 +53,22 @@ uses System.Math;
 
 procedure TForm1.Init;
 begin
-     _ImageW := 800;
+     _ImageW := 600;
      _ImageH := 600;
 
-     _AreaC := TDoubleAreaC.Create( -2, -1.5, +2, +1.5 );
+     _AreaC := TDoubleAreaC.Create( -2, -2, +2, +2 );
 
      with _Comput do
      begin
-          ItemsX := 20;
-          ItemsY := 20;
+          ItemsX := 10;
+          ItemsY := 10;
           ItemsZ :=  1;
 
           WorksX := _ImageW;
           WorksY := _ImageH;
           WorksZ :=       1;
 
-          ShaderC.Source.LoadFromFile( '..\..\_DATA\Mandelbrot.glsl' );
+          ShaderC.Source.LoadFromFile( '..\..\_DATA\Comput.glsl' );
 
           with Engine do Assert( Status, Errors.Text );
 

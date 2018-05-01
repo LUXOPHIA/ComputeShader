@@ -2,7 +2,10 @@
 
 #extension GL_ARB_compute_variable_group_size : enable
 
-layout( local_size_variable ) in;
+//layout( local_size_variable ) in;
+layout( local_size_x = 10,
+        local_size_y = 10,
+        local_size_z =  1 ) in;
 
 //############################################################################## ■
 
@@ -77,7 +80,8 @@ writeonly uniform image2D _CelIma;
 
 TDoubleC ScreenToComplex( ivec2 S )
 {
-    const uvec3 _ItemSize = gl_LocalGroupSizeARB * gl_NumWorkGroups;
+    //const uvec3 _ItemSize = gl_LocalGroupSizeARB * gl_NumWorkGroups;
+    const uvec3 _ItemSize = gl_WorkGroupSize * gl_NumWorkGroups;
 
     TDoubleC Result;
 

@@ -1,10 +1,11 @@
 object Form1: TForm1
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = Single
   Caption = 'ComputeShader'
-  ClientHeight = 727
-  ClientWidth = 820
+  ClientHeight = 660
+  ClientWidth = 620
   Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -16,14 +17,13 @@ object Form1: TForm1
     MultiResBitmap = <
       item
       end>
+    Align = Client
     DisableInterpolation = True
     Margins.Left = 10.000000000000000000
     Margins.Top = 10.000000000000000000
     Margins.Right = 10.000000000000000000
     Margins.Bottom = 10.000000000000000000
-    Position.X = 10.000000000000000000
-    Position.Y = 10.000000000000000000
-    Size.Width = 800.000000000000000000
+    Size.Width = 600.000000000000000000
     Size.Height = 600.000000000000000000
     Size.PlatformDefault = False
     WrapMode = Stretch
@@ -37,9 +37,9 @@ object Form1: TForm1
   object Panel1: TPanel
     Align = Bottom
     Margins.Top = -10.000000000000000000
-    Position.Y = 655.000000000000000000
-    Size.Width = 820.000000000000000000
-    Size.Height = 72.000000000000000000
+    Position.Y = 610.000000000000000000
+    Size.Width = 620.000000000000000000
+    Size.Height = 50.000000000000000000
     Size.PlatformDefault = False
     StyleLookup = 'pushpanel'
     TabOrder = 2
