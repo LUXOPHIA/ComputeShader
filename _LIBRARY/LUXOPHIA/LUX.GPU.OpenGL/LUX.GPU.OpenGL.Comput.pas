@@ -333,8 +333,10 @@ begin
           with _Buffers[ K ] do glBindBufferBase( GL_SHADER_STORAGE_BUFFER, Index, Value.ID );
      end;
 
-     glDispatchComputeGroupSizeARB( _GrupsX, _GrupsY, _GrupsZ,
-                                    _ItemsX, _ItemsY, _ItemsZ );
+     if Assigned( glDispatchComputeGroupSizeARB )
+     then glDispatchComputeGroupSizeARB( _GrupsX, _GrupsY, _GrupsZ,
+                                         _ItemsX, _ItemsY, _ItemsZ )
+     else glDispatchCompute            ( _GrupsX, _GrupsY, _GrupsZ );
 
      _Engine.Unuse;
 end;
