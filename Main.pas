@@ -11,6 +11,7 @@ uses
   LUX.GPU.OpenGL,
   LUX.GPU.OpenGL.Atom.Buffer.StoBuf,
   LUX.GPU.OpenGL.Atom.Imager.D2.Preset,
+  LUX.GPU.OpenGL.Atom.Textur.D2.Preset,
   LUX.GPU.OpenGL.Comput;
 
 type
@@ -29,6 +30,7 @@ type
     _AreaC  :TDoubleAreaC;
     _Comput :TGLComput;
     _Buffer :TGLStoBuf<TDoubleAreaC>;
+    _Textur :TGLCelTex2D_TAlphaColorF;
     _Imager :TGLCelIma2D_TAlphaColorF;
     ///// メソッド
     procedure Init;
@@ -67,16 +69,23 @@ begin
           WorksY := _ImageH;
           WorksZ :=       1;
 
-          ShaderC.Source.LoadFromFile( '..\..\_DATA\Comput.glsl' );
+          with ShaderC do
+          begin
+               Source.LoadFromFile( '..\..\_DATA\Comput.glsl' );
+
+               Assert( Status, Errors.Text );
+          end;
 
           with Engine do Assert( Status, Errors.Text );
 
           Buffers.Add( 'TStoBuf', _Buffer );
-
-          Imagers.Add( '_CellImag', _Imager );
+          Imagers.Add( '_Imager', _Imager );
+          Texturs.Add( '_Textur', _Textur );
      end;
 
      _Buffer[ 0 ] := _AreaC;
+
+     _Textur.Imager.LoadFromFile( '..\..\_DATA\Textur.png' );
 
      with _Imager do
      begin
@@ -94,6 +103,7 @@ end;
 
 procedure TForm1.Draw;
 begin
+     //_Comput.RunARB;
      _Comput.Run;
 
      _Imager.ExportTo( Image1.Bitmap );
@@ -105,6 +115,7 @@ procedure TForm1.FormCreate(Sender: TObject);
 begin
      _Comput := TGLComput.Create;
      _Buffer := TGLStoBuf<TDoubleAreaC>.Create( GL_STATIC_DRAW );
+     _Textur := TGLCelTex2D_TAlphaColorF.Create;
      _Imager := TGLCelIma2D_TAlphaColorF.Create;
 
      Init;
@@ -115,6 +126,7 @@ procedure TForm1.FormDestroy(Sender: TObject);
 begin
      _Comput.DisposeOf;
      _Buffer.DisposeOf;
+     _Textur.DisposeOf;
      _Imager.DisposeOf;
 end;
 
