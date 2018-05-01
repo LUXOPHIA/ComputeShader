@@ -18,6 +18,7 @@ type
   TForm1 = class(TForm)
     Image1: TImage;
     Panel1: TPanel;
+      Image2: TImage;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Image1MouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
@@ -85,7 +86,9 @@ begin
 
      _Buffer[ 0 ] := _AreaC;
 
-     _Textur.Imager.LoadFromFile( '..\..\_DATA\Textur.png' );
+     Image2.Bitmap.LoadFromFile( '..\..\_DATA\Textur.png' );
+
+     _Textur.Imager.ImportFrom( Image2.Bitmap );
 
      with _Imager do
      begin
