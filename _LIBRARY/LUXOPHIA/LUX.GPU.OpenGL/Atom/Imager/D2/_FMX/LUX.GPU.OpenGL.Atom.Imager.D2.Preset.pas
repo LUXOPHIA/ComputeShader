@@ -21,7 +21,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create;
        destructor Destroy; override;
        ///// メソッド
-       procedure CopyForm( const BMP_:TBitmap );
+       procedure CopyFrom( const BMP_:TBitmap );
        procedure CopyTo( const BMP_:TBitmap );
        procedure LoadFromFile( const FileName_:String );
        procedure SaveToFile( const FileName_:String );
@@ -81,7 +81,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TGLPoiIma2D_TAlphaColorF.CopyForm( const BMP_:TBitmap );
+procedure TGLPoiIma2D_TAlphaColorF.CopyFrom( const BMP_:TBitmap );
 var
    B :TBitmapData;
    X, Y :Integer;
@@ -136,7 +136,7 @@ begin
 
      B.LoadFromFile( FileName_ );
 
-     CopyForm( B );
+     CopyFrom( B );
 
      B.DisposeOf;
 end;
