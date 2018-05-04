@@ -49,6 +49,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function GetAlign :GLint;
        function GetStrid :GLint;
        function GetUsage :GLenum;
+       procedure SetUsage( const Usage_:GLenum );
        function GetCount :Integer;
        procedure SetCount( const Count_:Integer );
        ///// プロパティ
@@ -56,7 +57,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property Align :GLint   read GetAlign               ;
        property Strid :GLint   read GetStrid               ;
        property ID    :GLuint  read GetID                  ;
-       property Usage :GLenum  read GetUsage               ;
+       property Usage :GLenum  read GetUsage write SetUsage;
        property Count :Integer read GetCount write SetCount;
        ///// メソッド
        procedure Bind;
@@ -80,6 +81,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        function GetAlign :GLint;
        function GetStrid :GLint;
        function GetUsage :GLenum;
+       procedure SetUsage( const Usage_:GLenum );
        function GetCount :Integer;
        procedure SetCount( const Count_:Integer ); virtual;
        function GetItems( const I_:Integer ) :_TItem_;
@@ -87,14 +89,16 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        ///// メソッド
        function InitAlign :GLint; virtual;
        function InitStrid :GLint;
+       procedure MakeBuffer;
      public
-       constructor Create( const Usage_:GLenum );
+       constructor Create; overload;
+       constructor Create( const Usage_:GLenum ); overload;
        destructor Destroy; override;
        ///// プロパティ
        property Kind                      :GLenum  read GetKind                ;
        property Align                     :GLint   read GetAlign               ;
        property Strid                     :GLint   read GetStrid               ;
-       property Usage                     :GLenum  read GetUsage               ;
+       property Usage                     :GLenum  read GetUsage write SetUsage;
        property Count                     :Integer read GetCount write SetCount;
        property Items[ const I_:Integer ] :_TItem_ read GetItems write SetItems; default;
        ///// メソッド
@@ -185,10 +189,19 @@ begin
      Result := _Strid;
 end;
 
+//------------------------------------------------------------------------------
+
 function TGLBuffer<_TItem_>.GetUsage :GLenum;
 begin
      Result := _Usage;
 end;
+
+procedure TGLBuffer<_TItem_>.SetUsage( const Usage_:GLenum );
+begin
+     _Usage := Usage_;  MakeBuffer;
+end;
+
+//------------------------------------------------------------------------------
 
 function TGLBuffer<_TItem_>.GetCount :Integer;
 begin
@@ -197,14 +210,10 @@ end;
 
 procedure TGLBuffer<_TItem_>.SetCount( const Count_:Integer );
 begin
-     _Count := Count_;
-
-     Bind;
-
-       glBufferData( GetKind, _Strid * _Count, nil, _Usage );
-
-     Unbind;
+     _Count := Count_;  MakeBuffer;
 end;
+
+//------------------------------------------------------------------------------
 
 function TGLBuffer<_TItem_>.GetItems( const I_:Integer ) :_TItem_;
 begin
@@ -244,7 +253,23 @@ begin
      if M > 0 then Inc( Result, _Align - M );
 end;
 
+//------------------------------------------------------------------------------
+
+procedure TGLBuffer<_TItem_>.MakeBuffer;
+begin
+     Bind;
+
+       glBufferData( GetKind, _Strid * _Count, nil, _Usage );
+
+     Unbind;
+end;
+
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
+
+constructor TGLBuffer<_TItem_>.Create;
+begin
+     Create( GL_STATIC_DRAW );
+end;
 
 constructor TGLBuffer<_TItem_>.Create( const Usage_:GLenum );
 begin
