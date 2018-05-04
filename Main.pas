@@ -10,7 +10,9 @@ uses
   LUX, LUX.D1, LUX.D2, LUX.D3, LUX.M4, LUX.Complex, LUX.FMX.Controls,
   LUX.GPU.OpenGL,
   LUX.GPU.OpenGL.Atom.Buffer.StoBuf,
+  LUX.GPU.OpenGL.Atom.Imager.D1.Preset,
   LUX.GPU.OpenGL.Atom.Imager.D2.Preset,
+  LUX.GPU.OpenGL.Atom.Textur.D1.Preset,
   LUX.GPU.OpenGL.Atom.Textur.D2.Preset,
   LUX.GPU.OpenGL.Comput;
 
@@ -28,10 +30,10 @@ type
     { public 宣言 }
     _ImageW :Integer;
     _ImageH :Integer;
-    _AreaC  :TDoubleAreaC;
+    _RangeC :TDoubleAreaC;
     _Comput :TGLComput;
     _Buffer :TGLStoBuf<TDoubleAreaC>;
-    _Textur :TGLCelTex2D_TAlphaColorF;
+    _Textur :TGLPoiTex1D_TAlphaColorF;
     _Imager :TGLCelIma2D_TAlphaColorF;
     ///// メソッド
     procedure Init;
@@ -58,7 +60,7 @@ begin
      _ImageW := 600;
      _ImageH := 600;
 
-     _AreaC := TDoubleAreaC.Create( -2, -2, +2, +2 );
+     _RangeC := TDoubleAreaC.Create( -2, -2, +2, +2 );
 
      with _Comput do
      begin
@@ -84,11 +86,23 @@ begin
           Texturs.Add( '_Textur', _Textur );
      end;
 
-     _Buffer[ 0 ] := _AreaC;
+     _Buffer[ 0 ] := _RangeC;
 
-     Image2.Bitmap.LoadFromFile( '..\..\_DATA\Textur.png' );
+     with _Textur.Imager do
+     begin
+          with Grider do
+          begin
+               PoinsX := 3;
+          end;
 
-     _Textur.Imager.CopyFrom( Image2.Bitmap );
+          Grider[ 0 ] := TAlphaColorF.Create( 0, 0, 0 );
+          Grider[ 1 ] := TAlphaColorF.Create( 1, 0, 0 );
+          Grider[ 2 ] := TAlphaColorF.Create( 1, 1, 1 );
+
+          SendData;
+
+          CopyTo( Image2.Bitmap );
+     end;
 
      with _Imager do
      begin
@@ -118,7 +132,7 @@ procedure TForm1.FormCreate(Sender: TObject);
 begin
      _Comput := TGLComput.Create;
      _Buffer := TGLStoBuf<TDoubleAreaC>.Create( GL_STATIC_DRAW );
-     _Textur := TGLCelTex2D_TAlphaColorF.Create;
+     _Textur := TGLPoiTex1D_TAlphaColorF.Create;
      _Imager := TGLCelIma2D_TAlphaColorF.Create;
 
      Init;
@@ -142,7 +156,7 @@ var
 begin
      S := Power( 1.1, WheelDelta / 120 );
 
-     with _AreaC do
+     with _RangeC do
      begin
           with Image1.MousePos do
           begin
@@ -154,7 +168,7 @@ begin
           Max := ( Max - C ) * S + C;
      end;
 
-     _Buffer[ 0 ] := _AreaC;
+     _Buffer[ 0 ] := _RangeC;
 
      Draw;
 end;
