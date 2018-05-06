@@ -3,7 +3,10 @@
 interface //#################################################################### ■
 
 uses Winapi.OpenGL, Winapi.OpenGLext,
-     LUX, LUX.Data.Lattice.T2, LUX.GPU.OpenGL.Atom.Imager;
+     LUX,
+     LUX.Data.Lattice.T2,
+     LUX.GPU.OpenGL.Atom.Buffer.PixBuf.D2,
+     LUX.GPU.OpenGL.Atom.Imager;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
@@ -21,7 +24,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TGLImager2D<_TItem_:record;_TGrider_:constructor,TArray2D<_TItem_>> = class( TGLImager<_TItem_,_TGrider_>, IGLImager2D )
+     TGLImager2D<_TItem_:record;_TGrider_:constructor,TArray2D<_TItem_>> = class( TGLImager<_TItem_,_TGrider_,TGLPixBuf2D<_TItem_>>, IGLImager2D )
      private
      protected
      public
@@ -115,10 +118,12 @@ end;
 
 procedure TGLImager2D<_TItem_,_TGrider_>.SendPixBuf;
 begin
-     glTexImage2D( _Kind, 0, _TexelF, _Grider.ElemsX,
-                                      _Grider.ElemsY, 0,
-                             _PixelF,
-                             _PixelT, nil );
+     Bind;
+       glTexImage2D( _Kind, 0, _TexelF, _Grider.ElemsX,
+                                        _Grider.ElemsY, 0,
+                               _PixelF,
+                               _PixelT, nil );
+     Unbind;
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLPoiIma2D<_TItem_,_TGrider_>

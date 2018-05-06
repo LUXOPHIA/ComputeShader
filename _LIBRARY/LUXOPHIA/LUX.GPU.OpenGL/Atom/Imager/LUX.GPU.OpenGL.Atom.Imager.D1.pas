@@ -3,7 +3,10 @@
 interface //#################################################################### ■
 
 uses Winapi.OpenGL, Winapi.OpenGLext,
-     LUX, LUX.Data.Lattice.T1, LUX.GPU.OpenGL.Atom.Imager;
+     LUX,
+     LUX.Data.Lattice.T1,
+     LUX.GPU.OpenGL.Atom.Buffer.PixBuf.D1,
+     LUX.GPU.OpenGL.Atom.Imager;
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
@@ -21,7 +24,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TGLImager1D<_TItem_:record;_TGrider_:constructor,TArray1D<_TItem_>> = class( TGLImager<_TItem_,_TGrider_>, IGLImager1D )
+     TGLImager1D<_TItem_:record;_TGrider_:constructor,TArray1D<_TItem_>> = class( TGLImager<_TItem_,_TGrider_,TGLPixBuf1D<_TItem_>>, IGLImager1D )
      private
      protected
      public
@@ -114,9 +117,11 @@ end;
 
 procedure TGLImager1D<_TItem_,_TGrider_>.SendPixBuf;
 begin
-     glTexImage1D( _Kind, 0, _TexelF, _Grider.ElemsX, 0,
-                             _PixelF,
-                             _PixelT, nil );
+     Bind;
+       glTexImage1D( _Kind, 0, _TexelF, _Grider.ElemsX, 0,
+                               _PixelF,
+                               _PixelT, nil );
+     Unbind;
 end;
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLPoiIma1D<_TItem_,_TGrider_>
