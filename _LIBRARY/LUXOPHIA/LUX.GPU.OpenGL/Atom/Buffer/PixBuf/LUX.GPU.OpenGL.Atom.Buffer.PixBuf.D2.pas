@@ -12,6 +12,9 @@ uses Winapi.OpenGL, Winapi.OpenGLext,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
+     IGLPixBuf2D                 = interface;
+     TGLPixBuf2D<_TItem_:record> = class;
+
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
@@ -22,11 +25,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      ['{A3500166-874F-4CA2-84A8-8DDAFEA56712}']
      {protected}
        ///// アクセス
-       function GetCellsY :Integer;
-       procedure SetCellsY( const CellsY_:Integer );
+       function GetItemsY :Integer;
+       procedure SetItemsY( const ItemsY_:Integer );
      {public}
        ///// プロパティ
-       property CellsY :Integer read GetCellsY write SetCellsY;
+       property ItemsY :Integer read GetItemsY write SetItemsY;
      end;
 
      //-------------------------------------------------------------------------
@@ -34,15 +37,15 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TGLPixBuf2D<_TItem_:record> = class( TGLPixBuf1D<_TItem_>, IGLPixBuf2D )
      private
      protected
-       _CellsY :Integer;
+       _ItemsY :Integer;
        ///// アクセス
-       function GetCellsY :Integer;
-       procedure SetCellsY( const CellsY_:Integer );
+       function GetItemsY :Integer;
+       procedure SetItemsY( const ItemsY_:Integer );
        ///// メソッド
        procedure MakeBuffer; override;
      public
        ///// プロパティ
-       property CellsY :Integer read GetCellsY write SetCellsY;
+       property ItemsY :Integer read GetItemsY write SetItemsY;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -65,21 +68,21 @@ implementation //###############################################################
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TGLPixBuf2D<_TItem_>.GetCellsY :Integer;
+function TGLPixBuf2D<_TItem_>.GetItemsY :Integer;
 begin
-     Result := _CellsY;
+     Result := _ItemsY;
 end;
 
-procedure TGLPixBuf2D<_TItem_>.SetCellsY( const CellsY_:Integer );
+procedure TGLPixBuf2D<_TItem_>.SetItemsY( const ItemsY_:Integer );
 begin
-     _CellsY := CellsY_;  MakeBuffer;
+     _ItemsY := ItemsY_;  MakeBuffer;
 end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
 procedure TGLPixBuf2D<_TItem_>.MakeBuffer;
 begin
-     Count := _CellsY * _CellsX;
+     Count := _ItemsY * _ItemsX;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public

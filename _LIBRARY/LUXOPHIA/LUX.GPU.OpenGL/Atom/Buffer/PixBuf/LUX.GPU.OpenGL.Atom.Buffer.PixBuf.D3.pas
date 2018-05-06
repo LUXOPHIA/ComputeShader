@@ -12,6 +12,9 @@ uses Winapi.OpenGL, Winapi.OpenGLext,
 
 type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【型】
 
+     IGLPixBuf3D                 = interface;
+     TGLPixBuf3D<_TItem_:record> = class;
+
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【レコード】
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
@@ -22,11 +25,11 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      ['{9B883854-53BE-4B6B-887F-EE2CFC1F5CF0}']
      {protected}
        ///// アクセス
-       function GetCellsZ :Integer;
-       procedure SetCellsZ( const CellsZ_:Integer );
+       function GetItemsZ :Integer;
+       procedure SetItemsZ( const ItemsZ_:Integer );
      {public}
        ///// プロパティ
-       property CellsZ :Integer read GetCellsZ write SetCellsZ;
+       property ItemsZ :Integer read GetItemsZ write SetItemsZ;
      end;
 
      //-------------------------------------------------------------------------
@@ -34,15 +37,15 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TGLPixBuf3D<_TItem_:record> = class( TGLPixBuf2D<_TItem_>, IGLPixBuf3D )
      private
      protected
-       _CellsZ :Integer;
+       _ItemsZ :Integer;
        ///// アクセス
-       function GetCellsZ :Integer;
-       procedure SetCellsZ( const CellsZ_:Integer );
+       function GetItemsZ :Integer;
+       procedure SetItemsZ( const ItemsZ_:Integer );
        ///// メソッド
        procedure MakeBuffer; override;
      public
        ///// プロパティ
-       property CellsZ :Integer read GetCellsZ write SetCellsZ;
+       property ItemsZ :Integer read GetItemsZ write SetItemsZ;
      end;
 
 //const //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【定数】
@@ -65,21 +68,21 @@ implementation //###############################################################
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TGLPixBuf3D<_TItem_>.GetCellsZ :Integer;
+function TGLPixBuf3D<_TItem_>.GetItemsZ :Integer;
 begin
-     Result := _CellsZ;
+     Result := _ItemsZ;
 end;
 
-procedure TGLPixBuf3D<_TItem_>.SetCellsZ( const CellsZ_:Integer );
+procedure TGLPixBuf3D<_TItem_>.SetItemsZ( const ItemsZ_:Integer );
 begin
-     _CellsZ := CellsZ_;  MakeBuffer;
+     _ItemsZ := ItemsZ_;  MakeBuffer;
 end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
 procedure TGLPixBuf3D<_TItem_>.MakeBuffer;
 begin
-     Count := _CellsZ * _CellsY * _CellsX;
+     Count := _ItemsZ * _ItemsY * _ItemsX;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
