@@ -24,7 +24,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Start :Pointer;
        _Strid :GLint;
        ///// アクセス
-       function GetItemP( const I_:Integer ) :_PItem_;
+       function GetItemsP( const I_:Integer ) :_PItem_;
        function GetItems( const I_:Integer ) :_TItem_;
        procedure SetItems( const I_:Integer; const Item_:_TItem_ );
        function GetCount :Integer;
@@ -32,12 +32,12 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        constructor Create( const Paren_:IGLBuffer; const Start_:Pointer; const Strid_:GLint );
        destructor Destroy; override;
        ///// プロパティ
-       property Paren                     :IGLBuffer read   _Paren               ;
-       property Start                     :Pointer   read   _Start               ;
-       property Strid                     :GLint     read   _Strid               ;
-       property Count                     :Integer   read GetCount               ;
-       property ItemP[ const I_:Integer ] :_PItem_   read GetItemP               ;
-       property Items[ const I_:Integer ] :_TItem_   read GetItems write SetItems; default;
+       property Paren                      :IGLBuffer read   _Paren                ;
+       property Start                      :Pointer   read   _Start                ;
+       property Strid                      :GLint     read   _Strid                ;
+       property Count                      :Integer   read GetCount                ;
+       property ItemsP[ const I_:Integer ] :_PItem_   read GetItemsP               ;
+       property Items[ const I_:Integer ]  :_TItem_   read GetItems  write SetItems; default;
      end;
 
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLBuffer<_TItem_>
@@ -127,7 +127,7 @@ implementation //###############################################################
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TGLBufferData<_TItem_>.GetItemP( const I_:Integer ) :_PItem_;
+function TGLBufferData<_TItem_>.GetItemsP( const I_:Integer ) :_PItem_;
 var
    P :PByte;
 begin
@@ -138,12 +138,12 @@ end;
 
 function TGLBufferData<_TItem_>.GetItems( const I_:Integer ) :_TItem_;
 begin
-     Result := GetItemP( I_ )^;
+     Result := GetItemsP( I_ )^;
 end;
 
 procedure TGLBufferData<_TItem_>.SetItems( const I_:Integer; const Item_:_TItem_ );
 begin
-     GetItemP( I_ )^ := Item_;
+     GetItemsP( I_ )^ := Item_;
 end;
 
 //------------------------------------------------------------------------------
