@@ -19,7 +19,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      TGLBufferData<_TItem_:record> = class
      public type
        _PItem_ = ^_TItem_;
-     private
+     protected
        _Paren :IGLBuffer;
        _Start :Pointer;
        _Strid :GLint;
