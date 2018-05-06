@@ -14,7 +14,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLImager3D<_TItem_,_TGrider_>
+     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLImager3D<_TItem_,_TGrider_,_TGrid_>
 
      IGLImager3D = interface( IGLImager )
      ['{EBD2C427-B4C8-4649-8654-E79708545A23}']
@@ -24,7 +24,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TGLImager3D<_TItem_:record;_TGrider_:constructor,TArray3D<_TItem_>> = class( TGLImager<_TItem_,_TGrider_,TGLPixBuf3D<_TItem_>>, IGLImager3D )
+     TGLImager3D<_TItem_:record;
+                 _TGrider_:TArray3D<_TItem_>,constructor;
+                 _TGrid_:TGLPixBuf3D<_TItem_>,constructor> = class( TGLImager<_TItem_,_TGrider_,_TGrid_>, IGLImager3D )
      private
      protected
      public
@@ -45,7 +47,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TGLPoiIma3D<_TItem_:record> = class( TGLImager3D<_TItem_,TPoinArray3D<_TItem_>>, IGLPoiIma3D )
+     TGLPoiIma3D<_TItem_:record> = class( TGLImager3D<_TItem_,TPoinArray3D<_TItem_>,TGLPoiPix3D<_TItem_>>, IGLPoiIma3D )
      private
      protected
      public
@@ -61,7 +63,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
      //-------------------------------------------------------------------------
 
-     TGLCelIma3D<_TItem_:record> = class( TGLImager3D<_TItem_,TCellArray3D<_TItem_>>, IGLCelIma3D )
+     TGLCelIma3D<_TItem_:record> = class( TGLImager3D<_TItem_,TCellArray3D<_TItem_>,TGLCelPix3D<_TItem_>>, IGLCelIma3D )
      private
      protected
      public
@@ -81,7 +83,7 @@ uses System.Math;
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$【クラス】
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLImager3D<_TItem_,_TGrider_>
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLImager3D<_TItem_,_TGrider_,_TGrid_>
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& private
 
@@ -89,13 +91,13 @@ uses System.Math;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
-constructor TGLImager3D<_TItem_,_TGrider_>.Create;
+constructor TGLImager3D<_TItem_,_TGrider_,_TGrid_>.Create;
 begin
      inherited Create( GL_TEXTURE_3D );
 
 end;
 
-destructor TGLImager3D<_TItem_,_TGrider_>.Destroy;
+destructor TGLImager3D<_TItem_,_TGrider_,_TGrid_>.Destroy;
 begin
 
      inherited;
@@ -103,7 +105,7 @@ end;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TGLImager3D<_TItem_,_TGrider_>.SendData;
+procedure TGLImager3D<_TItem_,_TGrider_,_TGrid_>.SendData;
 begin
      Bind;
        glTexImage3D( _Kind, 0, _TexelF, _Grider.ElemsX,
@@ -117,7 +119,7 @@ end;
 
 //------------------------------------------------------------------------------
 
-procedure TGLImager3D<_TItem_,_TGrider_>.SendPixBuf;
+procedure TGLImager3D<_TItem_,_TGrider_,_TGrid_>.SendPixBuf;
 begin
      Bind;
        glTexImage3D( _Kind, 0, _TexelF, _Grider.ElemsX,
