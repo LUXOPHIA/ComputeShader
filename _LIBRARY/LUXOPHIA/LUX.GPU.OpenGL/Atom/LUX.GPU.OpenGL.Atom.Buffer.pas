@@ -90,7 +90,7 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        ///// メソッド
        function InitAlign :GLint; virtual;
        function InitStrid :GLint;
-       procedure MakeBuffer;
+       procedure MakeBuffer; virtual;
      public
        constructor Create; overload;
        constructor Create( const Usage_:GLenum ); overload;
