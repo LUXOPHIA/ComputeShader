@@ -77,6 +77,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _Strid :GLint;
        _Usage :GLenum;
        _Count :Integer;
+       ///// イベント
+       _OnMap   :TConstProc<IGLBuffer>;
+       _OnUnmap :TConstProc<IGLBuffer>;
        ///// アクセス
        function GetKind :GLenum; virtual; abstract;
        function GetAlign :GLint;
@@ -102,6 +105,9 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        property Usage                     :GLenum  read GetUsage write SetUsage;
        property Count                     :Integer read GetCount write SetCount;
        property Items[ const I_:Integer ] :_TItem_ read GetItems write SetItems; default;
+       ///// イベント
+       property OnMap   :TConstProc<IGLBuffer> read _OnMap   write _OnMap  ;
+       property OnUnmap :TConstProc<IGLBuffer> read _OnUnmap write _OnUnmap;
        ///// メソッド
        procedure Bind;
        procedure Unbind;
@@ -310,6 +316,8 @@ end;
 
 function TGLBuffer<_TItem_,_TIter_>.Map( const Access_:GLenum = GL_READ_WRITE ) :_TIter_;
 begin
+     if Assigned( _OnMap ) then _OnMap( Self );
+
      Bind;
 
        Result := _TIter_.Create;
@@ -328,6 +336,8 @@ begin
        glUnmapBuffer( GetKind );
 
      Unbind;
+
+     if Assigned( _OnUnmap ) then _OnUnmap( Self );
 end;
 
 //------------------------------------------------------------------------------
