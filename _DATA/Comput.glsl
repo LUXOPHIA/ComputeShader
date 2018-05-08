@@ -3,18 +3,20 @@
 #extension GL_ARB_compute_variable_group_size : enable
 
 //layout( local_size_variable ) in;
-layout( local_size_x = 10,
-        local_size_y = 10,
-        local_size_z =  1 ) in;
+  layout( local_size_x = 10,
+          local_size_y = 10,
+          local_size_z =  1   ) in;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const uvec3 _WorkGrupsN = gl_NumWorkGroups;
+  const ivec3 _WorkGrupsN = ivec3( gl_NumWorkGroups );
 
-//const uvec3 _WorkItemsN = gl_LocalGroupSizeARB;
-const uvec3 _WorkItemsN = gl_WorkGroupSize;
+//const ivec3 _WorkItemsN = ivec3( gl_LocalGroupSizeARB );
+  const ivec3 _WorkItemsN = ivec3( gl_WorkGroupSize     );
 
-const uvec3 _WorksN = _WorkGrupsN * _WorkItemsN;
+  const ivec3 _WorksN     = _WorkGrupsN * _WorkItemsN;
+
+  const ivec3 _WorkID     = ivec3( gl_GlobalInvocationID );
 
 //############################################################################## ■
 
@@ -93,8 +95,8 @@ TDoubleC ScreenToComplex( ivec2 S )
 {
     TDoubleC Result;
 
-    Result.R = ( _RangeC.Max.R - _RangeC.Min.R ) / _WorksN.x * ( S.x + 0.5 ) + _RangeC.Min.R;
-    Result.I = ( _RangeC.Min.I - _RangeC.Max.I ) / _WorksN.y * ( S.y + 0.5 ) + _RangeC.Max.I;
+    Result.R = ( _RangeC.Max.R - _RangeC.Min.R ) * ( S.x + 0.5 ) / _WorksN.x + _RangeC.Min.R;
+    Result.I = ( _RangeC.Min.I - _RangeC.Max.I ) * ( S.y + 0.5 ) / _WorksN.y + _RangeC.Max.I;
 
     return Result;
 }
@@ -117,13 +119,11 @@ vec4 ComplexToColor( TDoubleC C )
 
 void main()
 {
-  ivec2 I = ivec2( gl_GlobalInvocationID.xy );
-
-  TDoubleC C = ScreenToComplex( I );
+  TDoubleC C = ScreenToComplex( _WorkID.xy );
 
   vec4 L = ComplexToColor( C );
 
-  imageStore( _Imager, I, L );
+  imageStore( _Imager, _WorkID.xy, L );
 }
 
 //############################################################################## ■
