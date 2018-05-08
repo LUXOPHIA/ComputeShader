@@ -10,6 +10,9 @@ uses
   LUX, LUX.D1, LUX.D2, LUX.D3, LUX.M4, LUX.Complex, LUX.FMX.Controls,
   LUX.GPU.OpenGL,
   LUX.GPU.OpenGL.Atom.Buffer.StoBuf,
+  LUX.GPU.OpenGL.Atom.Buffer.PixBuf.D1,
+  LUX.GPU.OpenGL.Atom.Buffer.PixBuf.D2,
+  LUX.GPU.OpenGL.Atom.Imager,
   LUX.GPU.OpenGL.Atom.Imager.D1.Preset,
   LUX.GPU.OpenGL.Atom.Imager.D2.Preset,
   LUX.GPU.OpenGL.Atom.Textur.D1.Preset,
@@ -36,7 +39,10 @@ type
     _Textur :TGLPoiTex1D_TAlphaColorF;
     _Imager :TGLCelIma2D_TAlphaColorF;
     ///// メソッド
-    procedure Init;
+    procedure InitComput;
+    procedure InitBuffer;
+    procedure InitTextur;
+    procedure InitImager;
     procedure Draw;
   end;
 
@@ -55,65 +61,53 @@ uses System.Math;
 
 /////////////////////////////////////////////////////////////////////// メソッド
 
-procedure TForm1.Init;
+procedure TForm1.InitComput;
 begin
-     _ImageW := 600;
-     _ImageH := 600;
+     _Comput.ItemsX := 10;
+     _Comput.ItemsY := 10;
+     _Comput.ItemsZ :=  1;
 
-     _RangeC := TDoubleAreaC.Create( -2, -2, +2, +2 );
+     _Comput.WorksX := _ImageW;
+     _Comput.WorksY := _ImageH;
+     _Comput.WorksZ :=       1;
 
-     with _Comput do
-     begin
-          ItemsX := 10;
-          ItemsY := 10;
-          ItemsZ :=  1;
+     _Comput.ShaderC.Source.LoadFromFile( '..\..\_DATA\Comput.glsl' );
 
-          WorksX := _ImageW;
-          WorksY := _ImageH;
-          WorksZ :=       1;
+     Assert( _Comput.ShaderC.Status, _Comput.ShaderC.Errors.Text );
 
-          with ShaderC do
-          begin
-               Source.LoadFromFile( '..\..\_DATA\Comput.glsl' );
+     Assert( _Comput.Engine.Status, _Comput.Engine.Errors.Text );
 
-               Assert( Status, Errors.Text );
-          end;
+     _Comput.Buffers.Add( 'TBuffer', _Buffer );
+     _Comput.Imagers.Add( '_Imager', _Imager );
+     _Comput.Texturs.Add( '_Textur', _Textur );
+end;
 
-          with Engine do Assert( Status, Errors.Text );
-
-          Buffers.Add( 'TBuffer', _Buffer );
-          Imagers.Add( '_Imager', _Imager );
-          Texturs.Add( '_Textur', _Textur );
-     end;
-
+procedure TForm1.InitBuffer;
+begin
      _Buffer[ 0 ] := _RangeC;
+end;
 
-     with _Textur.Imager do
+procedure TForm1.InitTextur;
+begin
+     _Textur.Imager.Grid.PoinsX := 4;
+
+     with _Textur.Imager.Grid.Map do
      begin
-          with Grider do
-          begin
-               PoinsX := 3;
-          end;
+          Items[ 0 ] := TAlphaColorF.Create( 0, 0, 0 );
+          Items[ 1 ] := TAlphaColorF.Create( 0, 1, 0 );
+          Items[ 2 ] := TAlphaColorF.Create( 1, 1, 0 );
+          Items[ 3 ] := TAlphaColorF.Create( 1, 1, 1 );
 
-          Grider[ 0 ] := TAlphaColorF.Create( 0, 0, 0 );
-          Grider[ 1 ] := TAlphaColorF.Create( 1, 0, 0 );
-          Grider[ 2 ] := TAlphaColorF.Create( 1, 1, 1 );
-
-          SendData;
-
-          CopyTo( Image2.Bitmap );
+          DisposeOf;
      end;
 
-     with _Imager do
-     begin
-          with Grider do
-          begin
-               CellsX := _ImageW;
-               CellsY := _ImageH;
-          end;
+     _Textur.Imager.CopyTo( Image2.Bitmap );
+end;
 
-          SendData;
-     end;
+procedure TForm1.InitImager;
+begin
+     _Imager.Grid.CellsX := _ImageW;
+     _Imager.Grid.CellsY := _ImageH;
 end;
 
 //------------------------------------------------------------------------------
@@ -135,7 +129,16 @@ begin
      _Textur := TGLPoiTex1D_TAlphaColorF.Create;
      _Imager := TGLCelIma2D_TAlphaColorF.Create;
 
-     Init;
+     _ImageW := 600;
+     _ImageH := 600;
+
+     _RangeC := TDoubleAreaC.Create( -2, -2, +2, +2 );
+
+     InitComput;
+     InitBuffer;
+     InitTextur;
+     InitImager;
+
      Draw;
 end;
 
