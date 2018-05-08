@@ -123,9 +123,9 @@ end;
 procedure TGLImager3D<_TItem_,_TGrider_,_TIter_,_TGrid_>.SendPixBuf;
 begin
      Bind;
-       glTexImage3D( _Kind, 0, _TexelF, _Grider.ElemsX,
-                                        _Grider.ElemsY,
-                                        _Grider.ElemsZ, 0,
+       glTexImage3D( _Kind, 0, _TexelF, _Grid.ItemsX,
+                                        _Grid.ItemsY,
+                                        _Grid.ItemsZ, 0,
                                _PixelF,
                                _PixelT, nil );
      Unbind;
