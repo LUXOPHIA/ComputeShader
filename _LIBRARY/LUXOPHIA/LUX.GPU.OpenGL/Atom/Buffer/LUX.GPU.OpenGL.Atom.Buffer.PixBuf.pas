@@ -103,6 +103,8 @@ begin
        glBufferData( GL_PIXEL_UNPACK_BUFFER, SizeOf( _TItem_ ) * _Count, nil, _Usage );
 
      UnbindRead;
+
+     if Assigned( _OnUnmap ) then _OnUnmap( Self );
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
