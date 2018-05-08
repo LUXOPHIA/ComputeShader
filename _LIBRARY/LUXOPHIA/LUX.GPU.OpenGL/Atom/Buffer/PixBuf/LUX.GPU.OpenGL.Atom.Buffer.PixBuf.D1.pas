@@ -27,8 +27,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        ///// アクセス
        function GetParen :IGLPixBuf1D;
-       function GetPoinsX :Integer; virtual; abstract;
-       function GetCellsX :Integer; virtual; abstract;
+       function GetPoinsX :Integer;
+       function GetCellsX :Integer;
      public
        ///// プロパティ
        property Paren  :IGLPixBuf1D read GetParen ;
@@ -85,8 +85,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _PItem_ = TGLPixBufIter1D<_TItem_>._PItem_;
      protected
        ///// アクセス
-       function GetPoinsX :Integer; override;
-       function GetCellsX :Integer; override;
        function GetPoins( const X_:Integer ) :_TItem_;
        procedure SetPoins( const X_:Integer; const Item_:_TItem_ );
        function GetPoinsP( const X_:Integer ) :_PItem_;
@@ -126,8 +124,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _PItem_ = TGLPixBufIter1D<_TItem_>._PItem_;
      protected
        ///// アクセス
-       function GetPoinsX :Integer; override;
-       function GetCellsX :Integer; override;
        function GetCells( const X_:Integer ) :_TItem_;
        procedure SetCells( const X_:Integer; const Item_:_TItem_ );
        function GetCellsP( const X_:Integer ) :_PItem_;
@@ -185,6 +181,16 @@ begin
      Result := _Paren as IGLPixBuf1D;
 end;
 
+function TGLPixBufIter1D<_TItem_>.GetPoinsX :Integer;
+begin
+     Result := Paren.PoinsX;
+end;
+
+function TGLPixBufIter1D<_TItem_>.GetCellsX :Integer;
+begin
+     Result := Paren.CellsX;
+end;
+
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLPixBuf1D<_TItem_,_TIter_>
@@ -217,18 +223,6 @@ end;
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLPoiPixIter1D<_TItem_>
 
 /////////////////////////////////////////////////////////////////////// アクセス
-
-function TGLPoiPixIter1D<_TItem_>.GetPoinsX :Integer;
-begin
-     Result := Paren.PoinsX;
-end;
-
-function TGLPoiPixIter1D<_TItem_>.GetCellsX :Integer;
-begin
-     Result := Paren.CellsX;
-end;
-
-//------------------------------------------------------------------------------
 
 function TGLPoiPixIter1D<_TItem_>.GetPoins( const X_:Integer ) :_TItem_;
 begin
@@ -289,18 +283,6 @@ end;
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLCelPixIter1D<_TItem_>
 
 /////////////////////////////////////////////////////////////////////// アクセス
-
-function TGLCelPixIter1D<_TItem_>.GetPoinsX :Integer;
-begin
-     Result := Paren.PoinsX;
-end;
-
-function TGLCelPixIter1D<_TItem_>.GetCellsX :Integer;
-begin
-     Result := Paren.ItemsX;
-end;
-
-//------------------------------------------------------------------------------
 
 function TGLCelPixIter1D<_TItem_>.GetCells( const X_:Integer ) :_TItem_;
 begin

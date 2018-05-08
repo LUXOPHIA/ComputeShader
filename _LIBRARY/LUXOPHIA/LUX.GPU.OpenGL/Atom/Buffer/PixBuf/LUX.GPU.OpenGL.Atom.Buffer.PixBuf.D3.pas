@@ -28,8 +28,8 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      protected
        ///// アクセス
        function GetParen :IGLPixBuf3D;
-       function GetPoinsZ :Integer; virtual; abstract;
-       function GetCellsZ :Integer; virtual; abstract;
+       function GetPoinsZ :Integer;
+       function GetCellsZ :Integer;
      public
        ///// プロパティ
        property Paren  :IGLPixBuf3D read GetParen ;
@@ -86,8 +86,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _PItem_ = TGLPixBufIter3D<_TItem_>._PItem_;
      protected
        ///// アクセス
-       function GetPoinsZ :Integer; override;
-       function GetCellsZ :Integer; override;
        function GetPoins( const X_,Y_,Z_:Integer ) :_TItem_;
        procedure SetPoins( const X_,Y_,Z_:Integer; const Item_:_TItem_ );
        function GetPoinsP( const X_,Y_,Z_:Integer ) :_PItem_;
@@ -113,8 +111,16 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// アクセス
+       function GetPoinsX :Integer; override;
+       procedure SetPoinsX( const PoinsX_:Integer ); override;
+       function GetPoinsY :Integer; override;
+       procedure SetPoinsY( const PoinsY_:Integer ); override;
        function GetPoinsZ :Integer; override;
        procedure SetPoinsZ( const PoinsZ_:Integer ); override;
+       function GetCellsX :Integer; override;
+       procedure SetCellsX( const CellsX_:Integer ); override;
+       function GetCellsY :Integer; override;
+       procedure SetCellsY( const CellsY_:Integer ); override;
        function GetCellsZ :Integer; override;
        procedure SetCellsZ( const CellsZ_:Integer ); override;
      public
@@ -127,8 +133,6 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
        _PItem_ = TGLPixBufIter3D<_TItem_>._PItem_;
      protected
        ///// アクセス
-       function GetPoinsZ :Integer; override;
-       function GetCellsZ :Integer; override;
        function GetCells( const X_,Y_,Z_:Integer ) :_TItem_;
        procedure SetCells( const X_,Y_,Z_:Integer; const Item_:_TItem_ );
        function GetCellsP( const X_,Y_,Z_:Integer ) :_PItem_;
@@ -154,8 +158,16 @@ type //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
      private
      protected
        ///// アクセス
+       function GetPoinsX :Integer; override;
+       procedure SetPoinsX( const PoinsX_:Integer ); override;
+       function GetPoinsY :Integer; override;
+       procedure SetPoinsY( const PoinsY_:Integer ); override;
        function GetPoinsZ :Integer; override;
        procedure SetPoinsZ( const PoinsZ_:Integer ); override;
+       function GetCellsX :Integer; override;
+       procedure SetCellsX( const CellsX_:Integer ); override;
+       function GetCellsY :Integer; override;
+       procedure SetCellsY( const CellsY_:Integer ); override;
        function GetCellsZ :Integer; override;
        procedure SetCellsZ( const CellsZ_:Integer ); override;
      public
@@ -184,6 +196,16 @@ implementation //###############################################################
 function TGLPixBufIter3D<_TItem_>.GetParen :IGLPixBuf3D;
 begin
      Result := _Paren as IGLPixBuf3D;
+end;
+
+function TGLPixBufIter3D<_TItem_>.GetPoinsZ :Integer;
+begin
+     Result := Paren.PoinsZ;
+end;
+
+function TGLPixBufIter3D<_TItem_>.GetCellsZ :Integer;
+begin
+     Result := Paren.CellsZ;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& public
@@ -219,18 +241,6 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
-function TGLPoiPixIter3D<_TItem_>.GetPoinsZ :Integer;
-begin
-     Result := Paren.PoinsZ;
-end;
-
-function TGLPoiPixIter3D<_TItem_>.GetCellsZ :Integer;
-begin
-     Result := Paren.CellsZ;
-end;
-
-//------------------------------------------------------------------------------
-
 function TGLPoiPixIter3D<_TItem_>.GetPoins( const X_,Y_,Z_:Integer ) :_TItem_;
 begin
      Result := inherited Items[ ItemsI( X_, Y_, Z_ ) ];
@@ -263,6 +273,25 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
+function TGLPoiPix3D<_TItem_>.GetPoinsX :Integer;
+begin
+     Result := ItemsX;
+end;
+
+procedure TGLPoiPix3D<_TItem_>.SetPoinsX( const PoinsX_:Integer );
+begin
+     ItemsX := PoinsX_;
+end;
+
+function TGLPoiPix3D<_TItem_>.GetPoinsY :Integer;
+begin
+     Result := ItemsY;
+end;
+
+procedure TGLPoiPix3D<_TItem_>.SetPoinsY( const PoinsY_:Integer );
+begin
+     ItemsY := PoinsY_;
+end;
 
 function TGLPoiPix3D<_TItem_>.GetPoinsZ :Integer;
 begin
@@ -275,6 +304,26 @@ begin
 end;
 
 //------------------------------------------------------------------------------
+
+function TGLPoiPix3D<_TItem_>.GetCellsX :Integer;
+begin
+     Result := ItemsX - 1;
+end;
+
+procedure TGLPoiPix3D<_TItem_>.SetCellsX( const CellsX_:Integer );
+begin
+     ItemsX := CellsX_ + 1;
+end;
+
+function TGLPoiPix3D<_TItem_>.GetCellsY :Integer;
+begin
+     Result := ItemsY - 1;
+end;
+
+procedure TGLPoiPix3D<_TItem_>.SetCellsY( const CellsY_:Integer );
+begin
+     ItemsY := CellsY_ + 1;
+end;
 
 function TGLPoiPix3D<_TItem_>.GetCellsZ :Integer;
 begin
@@ -291,18 +340,6 @@ end;
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TGLCelPixIter3D<_TItem_>
 
 /////////////////////////////////////////////////////////////////////// アクセス
-
-function TGLCelPixIter3D<_TItem_>.GetPoinsZ :Integer;
-begin
-     Result := Paren.PoinsZ;
-end;
-
-function TGLCelPixIter3D<_TItem_>.GetCellsZ :Integer;
-begin
-     Result := Paren.ItemsZ;
-end;
-
-//------------------------------------------------------------------------------
 
 function TGLCelPixIter3D<_TItem_>.GetCells( const X_,Y_,Z_:Integer ) :_TItem_;
 begin
@@ -336,6 +373,26 @@ end;
 
 /////////////////////////////////////////////////////////////////////// アクセス
 
+function TGLCelPix3D<_TItem_>.GetPoinsX :Integer;
+begin
+     Result := ItemsX + 1;
+end;
+
+procedure TGLCelPix3D<_TItem_>.SetPoinsX( const PoinsX_:Integer );
+begin
+     ItemsX := PoinsX_ - 1;
+end;
+
+function TGLCelPix3D<_TItem_>.GetPoinsY :Integer;
+begin
+     Result := ItemsY + 1;
+end;
+
+procedure TGLCelPix3D<_TItem_>.SetPoinsY( const PoinsY_:Integer );
+begin
+     ItemsY := PoinsY_ - 1;
+end;
+
 function TGLCelPix3D<_TItem_>.GetPoinsZ :Integer;
 begin
      Result := ItemsZ + 1;
@@ -347,6 +404,26 @@ begin
 end;
 
 //------------------------------------------------------------------------------
+
+function TGLCelPix3D<_TItem_>.GetCellsX :Integer;
+begin
+     Result := ItemsX;
+end;
+
+procedure TGLCelPix3D<_TItem_>.SetCellsX( const CellsX_:Integer );
+begin
+     ItemsX := CellsX_;
+end;
+
+function TGLCelPix3D<_TItem_>.GetCellsY :Integer;
+begin
+     Result := ItemsY;
+end;
+
+procedure TGLCelPix3D<_TItem_>.SetCellsY( const CellsY_:Integer );
+begin
+     ItemsY := CellsY_;
+end;
 
 function TGLCelPix3D<_TItem_>.GetCellsZ :Integer;
 begin
