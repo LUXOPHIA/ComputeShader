@@ -7,6 +7,15 @@ layout( local_size_x = 10,
         local_size_y = 10,
         local_size_z =  1 ) in;
 
+////////////////////////////////////////////////////////////////////////////////
+
+const uvec3 _WorkGrupsN = gl_NumWorkGroups;
+
+//const uvec3 _WorkItemsN = gl_LocalGroupSizeARB;
+const uvec3 _WorkItemsN = gl_WorkGroupSize;
+
+const uvec3 _WorksN = _WorkGrupsN * _WorkItemsN;
+
 //############################################################################## ■
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TDoubleC
@@ -71,24 +80,21 @@ struct TAreaC
 
 layout( std430 ) buffer TBuffer
 {
-    TAreaC _MandArea;
+    TAreaC _RangeC;
 };
 
 writeonly uniform image2D _Imager;
 
-uniform sampler2D _Textur;
+uniform sampler1D _Textur;
 
 //############################################################################## ■
 
 TDoubleC ScreenToComplex( ivec2 S )
 {
-    //const uvec3 _ItemSize = gl_LocalGroupSizeARB * gl_NumWorkGroups;
-    const uvec3 _ItemSize = gl_WorkGroupSize * gl_NumWorkGroups;
-
     TDoubleC Result;
 
-    Result.R = ( _MandArea.Max.R - _MandArea.Min.R ) / _ItemSize.x * ( S.x + 0.5 ) + _MandArea.Min.R;
-    Result.I = ( _MandArea.Min.I - _MandArea.Max.I ) / _ItemSize.y * ( S.y + 0.5 ) + _MandArea.Max.I;
+    Result.R = ( _RangeC.Max.R - _RangeC.Min.R ) / _WorksN.x * ( S.x + 0.5 ) + _RangeC.Min.R;
+    Result.I = ( _RangeC.Min.I - _RangeC.Max.I ) / _WorksN.y * ( S.y + 0.5 ) + _RangeC.Max.I;
 
     return Result;
 }
@@ -101,10 +107,10 @@ vec4 ComplexToColor( TDoubleC C )
     {
         Z = Add( Pow2( Z ), C );
 
-        if ( Abs( Z ) > 2 ) return texture( _Textur, vec2( N / 500.0, 0 ) );
+        if ( Abs( Z ) > 2 ) return texture( _Textur, N / 500.0 );
     }
 
-    return texture( _Textur, vec2( 1, 0 ) );
+    return texture( _Textur, 1 );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
