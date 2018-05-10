@@ -31,7 +31,6 @@ type
     { private 宣言 }
   public
     { public 宣言 }
-
     _ImageW :Integer;
     _ImageH :Integer;
     _RangeC :TDoubleAreaC;
