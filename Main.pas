@@ -88,18 +88,19 @@ begin
 end;
 
 procedure TForm1.InitTextur;
+var
+   D :TGLPoiPixIter1D<TAlphaColorF>;
 begin
      _Textur.Imager.Grid.PoinsX := 4;
 
-     with _Textur.Imager.Grid.Map do
-     begin
-          Items[ 0 ] := TAlphaColorF.Create( 0, 0, 0 );
-          Items[ 1 ] := TAlphaColorF.Create( 0, 1, 0 );
-          Items[ 2 ] := TAlphaColorF.Create( 1, 1, 0 );
-          Items[ 3 ] := TAlphaColorF.Create( 1, 1, 1 );
+     D := _Textur.Imager.Grid.Map;
 
-          DisposeOf;
-     end;
+     D[ 0 ] := TAlphaColorF.Create( 0, 0, 0 );
+     D[ 1 ] := TAlphaColorF.Create( 1, 0, 0 );
+     D[ 2 ] := TAlphaColorF.Create( 1, 1, 0 );
+     D[ 3 ] := TAlphaColorF.Create( 1, 1, 1 );
+
+     D.DisposeOf;
 
      _Textur.Imager.CopyTo( Image2.Bitmap );
 end;
