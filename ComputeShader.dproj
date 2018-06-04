@@ -402,6 +402,7 @@
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Color\Grid\D1\_FMX\LUX.Color.Grid.D1.Preset.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Color\Grid\D2\_FMX\LUX.Color.Grid.D2.Preset.pas"/>
         <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\Color\Format\LUX.Color.Format.HDR.pas"/>
+        <DCCReference Include="_LIBRARY\LUXOPHIA\LUX\FMX\LUX.FMX.pas"/>
         <None Include="_DATA\Comput.glsl"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
