@@ -24,9 +24,11 @@ type
     Image1: TImage;
     Panel1: TPanel;
       Image2: TImage;
+    Timer1: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Image1MouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
+    procedure Timer1Timer(Sender: TObject);
   private
     { private 宣言 }
   public
@@ -43,7 +45,6 @@ type
     procedure InitBuffer;
     procedure InitTextur;
     procedure InitImager;
-    procedure Draw;
   end;
 
 var
@@ -105,20 +106,18 @@ begin
      _Textur.Imager.CopyTo( Image2.Bitmap );
 end;
 
-procedure TForm1.InitImager;
-begin
-     _Imager.Grid.CellsX := _ImageW;
-     _Imager.Grid.CellsY := _ImageH;
-end;
-
-//------------------------------------------------------------------------------
-
-procedure TForm1.Draw;
+procedure TForm1.Timer1Timer(Sender: TObject);
 begin
      //_Comput.RunARB;
      _Comput.Run;
 
      _Imager.CopyTo( Image1.Bitmap );
+end;
+
+procedure TForm1.InitImager;
+begin
+     _Imager.Grid.CellsX := _ImageW;
+     _Imager.Grid.CellsY := _ImageH;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -139,8 +138,6 @@ begin
      InitBuffer;
      InitTextur;
      InitImager;
-
-     Draw;
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -173,8 +170,6 @@ begin
      end;
 
      _Buffer[ 0 ] := _RangeC;
-
-     Draw;
 end;
 
 end. //######################################################################### ■
