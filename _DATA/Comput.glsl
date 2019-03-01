@@ -9,14 +9,14 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  const ivec3 _WorkGrupsN = ivec3( gl_NumWorkGroups );
+  ivec3 _WorkGrupsN = ivec3( gl_NumWorkGroups );
 
-//const ivec3 _WorkItemsN = ivec3( gl_LocalGroupSizeARB );
-  const ivec3 _WorkItemsN = ivec3( gl_WorkGroupSize     );
+//ivec3 _WorkItemsN = ivec3( gl_LocalGroupSizeARB );
+  ivec3 _WorkItemsN = ivec3( gl_WorkGroupSize     );
 
-  const ivec3 _WorksN     = _WorkGrupsN * _WorkItemsN;
+  ivec3 _WorksN     = _WorkGrupsN * _WorkItemsN;
 
-  const ivec3 _WorkID     = ivec3( gl_GlobalInvocationID );
+  ivec3 _WorkID     = ivec3( gl_GlobalInvocationID );
 
 //############################################################################## ■
 
