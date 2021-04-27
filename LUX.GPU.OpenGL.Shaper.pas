@@ -4,7 +4,7 @@ interface //####################################################################
 
 uses System.UITypes,
      Winapi.OpenGL, Winapi.OpenGLext,
-     LUX, LUX.D2, LUX.D3, LUX.M4,
+     LUX, LUX.D2, LUX.D3, LUX.D4x4,
      LUX.GPU.OpenGL,
      LUX.GPU.OpenGL.Atom.Buffer,
      LUX.GPU.OpenGL.Atom.Buffer.VerBuf,
@@ -409,9 +409,9 @@ end;
 
 destructor TGLShaperPoin.Destroy;
 begin
-     _PosBuf.DisposeOf;
-     _NorBuf.DisposeOf;
-     _TexBuf.DisposeOf;
+     _PosBuf.Free;
+     _NorBuf.Free;
+     _TexBuf.Free;
 
      inherited;
 end;
@@ -469,7 +469,7 @@ begin
                end;
           end;
 
-          DisposeOf;
+          Free;
      end;
 
      _Inform.BouBox := B;
@@ -519,9 +519,9 @@ begin
           end;
      end;
 
-     Ps.DisposeOf;
-     Ns.DisposeOf;
-     Ts.DisposeOf;
+     Ps.Free;
+     Ns.Free;
+     Ts.Free;
 
      CalcBouBox;
 end;
@@ -553,7 +553,7 @@ begin
 
         F.Read( Fs[0], 50 * FsN );
      finally
-            F.DisposeOf;
+            F.Free;
      end;
 
      _PosBuf.Count := 3 * FsN;
@@ -583,8 +583,8 @@ begin
           Inc( E.Z, 3 );
      end;
 
-     Ps.DisposeOf;
-     Ns.DisposeOf;
+     Ps.Free;
+     Ns.Free;
 
      CalcBouBox;
 end;
@@ -694,7 +694,7 @@ begin
                end;
           end;
      finally
-            F.DisposeOf;
+            F.Free;
      end;
 
      if Length( Ps ) > 0 then
@@ -707,7 +707,7 @@ begin
                begin
                     for V in Vs do Items[ V.Value ] := Ps[ V.Key.P ];
 
-                    DisposeOf;
+                    Free;
                end;
           end;
      end;
@@ -722,7 +722,7 @@ begin
                begin
                     for V in Vs do Items[ V.Value ] := Ns[ V.Key.N ];
 
-                    DisposeOf;
+                    Free;
                end;
           end;
      end;
@@ -737,12 +737,12 @@ begin
                begin
                     for V in Vs do Items[ V.Value ] := Ts[ V.Key.T ];
 
-                    DisposeOf;
+                    Free;
                end;
           end;
      end;
 
-     Vs.DisposeOf;
+     Vs.Free;
 
      CalcBouBox;
 end;
@@ -766,7 +766,7 @@ end;
 
 destructor TGLShaperLine.Destroy;
 begin
-     _EleBuf.DisposeOf;
+     _EleBuf.Free;
 
      inherited;
 end;
@@ -834,7 +834,7 @@ begin
           end;
      end;
 
-     Es.DisposeOf;
+     Es.Free;
 end;
 
 //------------------------------------------------------------------------------
@@ -865,7 +865,7 @@ begin
 
         F.Read( Fs[0], 50 * FsN );
      finally
-            F.DisposeOf;
+            F.Free;
      end;
 
      _PosBuf.Count := 3 * FsN;
@@ -901,9 +901,9 @@ begin
           Inc( E.Z, 3 );
      end;
 
-     Ps.DisposeOf;
-     Ns.DisposeOf;
-     Es.DisposeOf;
+     Ps.Free;
+     Ns.Free;
+     Es.Free;
 
      CalcBouBox;
 end;
@@ -1026,7 +1026,7 @@ begin
                end;
           end;
      finally
-            F.DisposeOf;
+            F.Free;
      end;
 
      if Length( Ps ) > 0 then
@@ -1039,7 +1039,7 @@ begin
                begin
                     for V in Vs do Items[ V.Value ] := Ps[ V.Key.P ];
 
-                    DisposeOf;
+                    Free;
                end;
           end;
      end;
@@ -1054,7 +1054,7 @@ begin
                begin
                     for V in Vs do Items[ V.Value ] := Ns[ V.Key.N ];
 
-                    DisposeOf;
+                    Free;
                end;
           end;
      end;
@@ -1069,12 +1069,12 @@ begin
                begin
                     for V in Vs do Items[ V.Value ] := Ts[ V.Key.T ];
 
-                    DisposeOf;
+                    Free;
                end;
           end;
      end;
 
-     Vs.DisposeOf;
+     Vs.Free;
 
      _EleBuf.CopyFrom( Es );
 
@@ -1100,7 +1100,7 @@ end;
 
 destructor TGLShaperQuadLine.Destroy;
 begin
-     _EleBuf.DisposeOf;
+     _EleBuf.Free;
 
      inherited;
 end;
@@ -1142,7 +1142,7 @@ end;
 
 destructor TGLShaperFace.Destroy;
 begin
-     _EleBuf.DisposeOf;
+     _EleBuf.Free;
 
      inherited;
 end;
@@ -1195,7 +1195,7 @@ begin
           end;
      end;
 
-     Es.DisposeOf;
+     Es.Free;
 end;
 
 //------------------------------------------------------------------------------
@@ -1226,7 +1226,7 @@ begin
 
         F.Read( Fs[0], 50 * FsN );
      finally
-            F.DisposeOf;
+            F.Free;
      end;
 
      _PosBuf.Count := 3 * FsN;
@@ -1260,9 +1260,9 @@ begin
           Inc( E.Z, 3 );
      end;
 
-     Ps.DisposeOf;
-     Ns.DisposeOf;
-     Es.DisposeOf;
+     Ps.Free;
+     Ns.Free;
+     Es.Free;
 
      CalcBouBox;
 end;
@@ -1386,7 +1386,7 @@ begin
                end;
           end;
      finally
-            F.DisposeOf;
+            F.Free;
      end;
 
      if Length( Ps ) > 0 then
@@ -1399,7 +1399,7 @@ begin
                begin
                     for V in Vs do Items[ V.Value ] := Ps[ V.Key.P ];
 
-                    DisposeOf;
+                    Free;
                end;
           end;
      end;
@@ -1414,7 +1414,7 @@ begin
                begin
                     for V in Vs do Items[ V.Value ] := Ns[ V.Key.N ];
 
-                    DisposeOf;
+                    Free;
                end;
           end;
      end;
@@ -1429,12 +1429,12 @@ begin
                begin
                     for V in Vs do Items[ V.Value ] := Ts[ V.Key.T ];
 
-                    DisposeOf;
+                    Free;
                end;
           end;
      end;
 
-     Vs.DisposeOf;
+     Vs.Free;
 
      _EleBuf.CopyFrom( Es );
 
