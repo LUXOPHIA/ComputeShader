@@ -4,7 +4,7 @@ interface //####################################################################
 
 uses System.UITypes,
      Winapi.OpenGL, Winapi.OpenGLext,
-     LUX, LUX.D2, LUX.D3, LUX.M4,
+     LUX, LUX.D2, LUX.D3, LUX.D4x4,
      LUX.GPU.OpenGL,
      LUX.GPU.OpenGL.Atom.Buffer,
      LUX.GPU.OpenGL.Atom.Buffer.VerBuf,
@@ -225,7 +225,7 @@ begin
           Items[ 6 ] := TSingle3D.Create( -SX, +SY, +SZ );
           Items[ 7 ] := TSingle3D.Create( +SX, +SY, +SZ );
 
-          DisposeOf;
+          Free;
      end;
 
      CalcBouBox;
@@ -300,7 +300,7 @@ begin
           Items[ 6 ] := TSingle3D.Create( -1, +1, +1 ).Unitor;
           Items[ 7 ] := TSingle3D.Create( +1, +1, +1 ).Unitor;
 
-          DisposeOf;
+          Free;
      end;
 
      with _EleBuf.Map( GL_WRITE_ONLY ) do
@@ -321,7 +321,7 @@ begin
           Items[ 10 ] := TCardinal2D.Create( 5, 1 );
           Items[ 11 ] := TCardinal2D.Create( 3, 2 );
 
-          DisposeOf;
+          Free;
      end;
 
      _SizeX := 1;
@@ -371,7 +371,7 @@ begin
           end;
      end;
 
-     Ps.DisposeOf;
+     Ps.Free;
 end;
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& protected
